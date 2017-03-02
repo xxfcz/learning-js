@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
+	<script type="text/javascript">
+		document.write(document.URL);
+		console.log(window.location);
+		document.location.hash = "#bookmark";
+		document.write(document.URL);
+
+		console.log(window.navigator);
+	</script>
+</head>
+<body>
+<div>
+	<a href="#bookmark">前往书签</a>
+</div>
+<div style="height: 800px;"></div>
+<div>
+	<a name="bookmark" onclick="window.location='#top'">书签。跳到顶部</a>
+</div>
+</body>
+</html>

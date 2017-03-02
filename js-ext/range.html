@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/ImmutableRange.js"></script>
+	<script type="text/javascript" src="js/StrictRange.js"></script>
+	<script type="text/javascript">
+		var r1 = new ImmutableRange(1, 10);
+		console.log(r1.includes(3));
+		r1.from = 7;    // No effect
+		r1.middle = 3;
+		console.log('r1.objectId', r1.objectId);
+		console.log(r1);
+
+		document.write("enumerable properties:<br/>");
+		for (var x in r1) {
+			document.write(x + "<br/>");
+		}
+
+		var r2 = new StrictRange(5, 20);
+		//r2.from = 30;   // Error!
+	</script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/Sets2.js"></script>
+	<script type="text/javascript">
+		function test01() {
+			var s1 = new sets.ArraySet(1, 2, 3, 4, 5, 6, 7, 8);
+			var s2 = new sets.NotSet(s1);
+			console.log('5 in s2?', s2.contains(5));
+			console.log('10 in s2?', s2.contains(10));
+			console.log(s2.toString());
+		}
+
+		test01();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

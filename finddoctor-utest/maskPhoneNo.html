@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>测试一下</title>
+	<script src="../js/utest.js"></script>
+	<script>
+
+		function maskPhoneNo(phone) {
+			if (!phone)
+				return "";
+
+			var r, len = phone.length;
+			if (phone.length >= 7)
+				r = phone.substring(0, 3) + "****" + phone.substring(7, 11);
+			else
+				r = phone;
+			return r;
+		}
+
+
+		assert(maskPhoneNo("") === "");
+		assert(maskPhoneNo("13760880952") == "137****0952");
+		assert(maskPhoneNo("1234567890") == "123****890");
+		assert(maskPhoneNo("123456789") === "123****89");
+		assert(maskPhoneNo("12345678") === "123****8");
+		assert(maskPhoneNo("1234567") === "123****");
+		assert(maskPhoneNo("123456") === "123456");
+		assert(maskPhoneNo("12345") === "12345");
+		assert(maskPhoneNo("1234") === "1234");
+		assert(maskPhoneNo("123") === "123");
+	</script>
+</head>
+<body>
+
+</body>
+</html>

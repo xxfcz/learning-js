@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>计算年龄</title>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script src="../js/utils.js"></script>
+	<script>
+
+		function yearsBetween(birthday, today) {
+			var todayYear = today.getFullYear();
+			var todayMonth = today.getMonth();
+			var todayDay = today.getDate();
+			birthdayYear = birthday.getFullYear();
+			birthdayMonth = birthday.getMonth();
+			birthdayDay = birthday.getDate();
+
+			var age = todayYear - birthdayYear; // 年份差
+			if (age < 0) {
+				return -1;
+			}
+
+			if (age > 0) { // 跨年  2000 ==> 2001, 1岁
+				var months = todayMonth - birthdayMonth;
+
+				if (months < 0) // 未到月份：2000-3-25 ==> 2001-2-27, 0岁
+					return age - 1;   // 减一年
+
+				if (months > 0) { // 跨月，足够：2000-3-25 ==> 2001-4-1, 1岁
+					return age;
+				}
+
+				// 同月，算日
+				if (todayDay - birthdayDay < 0)   // 未到日子：2000-3-25 ==> 2001-3-24, 0岁
+					return age - 1; // 减一年
+
+				return age; // 2000-3-25 ==> 2001-3-25, 1岁
+			}
+			return age;
+		}
+
+		function calcAge(birthday) {
+			return yearsBetween(birthday, new Date());
+		}
+
+
+		(function () {
+			var y;
+			y = yearsBetween(new Date("2000/3/25"), new Date("2001/3/25"));
+			console.log(y);
+			assert(y === 1);
+
+			y = yearsBetween(new Date("2000/3/25"), new Date("2002/3/25"));
+			console.log(y);
+			assert(y === 2);
+
+			y = yearsBetween(new Date("2000/3/25"), new Date("2002/4/25"));
+			console.log(y);
+			assert(y === 2);
+
+			y = yearsBetween(new Date("2000/3/25"), new Date("2002/3/26"));
+			console.log(y);
+			assert(y === 2);
+
+			y = yearsBetween(new Date("2000/3/25"), new Date("2001/3/24"));
+			console.log(y);
+			assert(y === 0);
+
+			y = yearsBetween(new Date("2000/3/25"), new Date("2001/2/25"));
+			console.log(y);
+			assert(y === 0);
+		})();
+
+
+		// 闰年生日
+		(function () {
+			var bd = new Date("2016/2/29");
+			var y;
+
+			y = yearsBetween(bd, new Date("2016/3/1"));
+			console.log(y);
+			assert(y === 0);
+
+			y = yearsBetween(bd, new Date("2017/2/28"));
+			console.log(y);
+			assert(y === 0);
+
+			y = yearsBetween(bd, new Date("2017/3/1"));
+			console.log(y);
+			assert(y === 1);
+		})();
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

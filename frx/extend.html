@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+   <title>extend</title>
+   <script type="text/javascript" src="../vendor/json2.js"></script>
+   <script type="text/javascript" src="lib/console.js"></script>
+   <script type="text/javascript" src="lib/extend.js"></script>
+</head>
+<body>
+<script>
+
+    var o1 = {
+        x: 1,
+        toString: '串'
+    };
+
+    var o2 = {
+        x: 10,
+        y: 20,
+        valueOf: '胡说！'
+    };
+
+    var o3 = extend(o1, o2);
+    console.log('o2.hasOnwProperty("valueOf")', o2.hasOwnProperty('valueOf'));
+    console.log('结果是：', JSON.stringify(o3));
+    console.log('o3.valueOf:', o3.valueOf);
+
+</script>
+</body>
+</html>

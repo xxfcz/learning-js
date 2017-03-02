@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>Object.defineProperty</title>
+	<script src="../vendor/angular.js"></script>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script src="../js/utils.js"></script>
+	<script>
+		(function () {
+			var o = {
+				Birthday: 2000
+			};
+			Object.defineProperty(o, "Age", {
+				get: function () {
+					return 2016 - this.Birthday;
+				},
+				enumerable: true
+			});
+
+			var copied = angular.copy(o);
+			var extended = angular.extend(o);
+			var merged = angular.merge({}, o);
+			console.log("对实例定义的属性 -------------------------- ");
+			console.log("原始的：", o);
+			console.log("复制的：", copied);
+			console.log("扩展的：", extended);
+			console.log("合并的：", merged);
+		})();
+
+		(function () {
+
+			function Foo() {
+				this.Birthday = 2000;
+			}
+
+			Object.defineProperty(Foo.prototype, "Age", {
+				get: function () {
+					return 2016 - this.Birthday;
+				},
+				enumerable: true
+			});
+
+			Object.defineProperty(Foo.prototype, "Age2", {
+				get: function () {
+					return 2026 - this.Birthday;
+				},
+				enumerable: false
+			});
+
+			var o = new Foo();
+			var copied = angular.copy(o);
+			var extended = angular.extend(o);
+			var merged = angular.merge({}, o);
+			console.log("对原型对象定义的属性 -------------------------- ");
+			console.log("原始的：", o);
+			console.log("复制的：", copied);
+			console.log("扩展的：", extended);
+			console.log("合并的：", merged);
+
+			for (var x in o) {
+				console.log(x);
+			}
+		})();
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

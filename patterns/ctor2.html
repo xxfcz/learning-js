@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>构造函数（闭包版）</title>
+	<script src="../vendor/angular.js"></script>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+
+		var Book = (function () {
+			// private static:
+			var bookNum = 0;
+
+			function checkBook(name) {
+			}
+
+			//constructor
+			function _book(id, bookname, price) {
+				// private:
+				var num = 1;
+
+				function checkId() {
+				}
+
+				// public:
+				this.id = id;
+				this.bookname = bookname;
+				this.price = price;
+				this.copy = function () {
+				};
+
+				bookNum++;
+				if (bookNum > 3)
+					throw new Error("我们仅出版3本书。");
+			}
+
+			// public shared:
+			_book.prototype.isJSBook = false;
+			_book.prototype.display = function () {
+				console.log(String.format("Book {0}: 《{1}》", this.id, this.bookname));
+			};
+
+			// public static:
+			_book.isChinese = true;
+			_book.resetTime = function () {
+				console.log("Time has been reset!");
+			};
+
+			return _book;
+		})();
+
+		/* 测试 ***************************************************************/
+
+		(function () {
+			var o = new Book(1, "JS", 35.5);
+			console.log(o);
+			assert(o.__proto__ === Book.prototype); // __proto__ 用于对象实例，prototype 用于类
+			assert(o.prototype === undefined);
+		}());
+
+		(function () {
+			var o = new Book(2, "JS设计模式", 75.5);
+			assert(o.num === undefined);    // private
+			assert(o.id === 2);             // public
+			assert(o.isJSBook === false);   // shared
+			assert(Book.isChinese);         // static
+		}());
+
+
+		(function(){
+			var a = Book(5, "Java 8", 7.5); // 没有使用new，this指向window
+			assert(a === undefined);
+			assert(window.id === 5);        // 属性id被添加到window上
+		})();
+
+		(function () {
+			//var a = new Book(3, "C++11", 99); // Error: 超出3本
+		})();
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

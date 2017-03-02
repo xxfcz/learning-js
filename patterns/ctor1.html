@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>构造函数</title>
+	<script src="../vendor/angular.js"></script>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+		var Book = function (id, bookname, price) {
+			// private:
+			var num = 1;
+
+			function checkId() {
+			}
+
+			// public:
+			this.id = id;
+			this.bookname = bookname;
+			this.price = price;
+			this.copy = function () {
+			}
+		};
+
+		// (public) shared:
+		Book.prototype.isJSBook = false;
+		Book.prototype.display = function () {
+			console.log(String.format("Book {0}: 《{1}》", this.id, this.bookname));
+		};
+
+		// (public) static:
+		Book.isChinese = true;
+		Book.resetTime = function() {
+			console.log("Time has been reset!");
+		};
+
+
+		(function() {
+			var o = new Book(1, "JS", 35.5);
+			console.log(o);
+			assert(o.__proto__ === Book.prototype); // __proto__ 用于对象实例，prototype 用于类
+			assert(o.prototype === undefined);
+		}());
+
+		(function() {
+			var o = new Book(2, "JS设计模式", 75.5);
+			assert(o.num === undefined);    // private
+			assert(o.id === 2);             // public
+			assert(o.isJSBook === false);   // shared
+			assert(Book.isChinese);         // static
+		}());
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

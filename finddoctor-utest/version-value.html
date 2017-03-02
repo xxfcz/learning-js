@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>Document</title>
+	<script type="text/javascript" src="../js/utils.js"></script>
+	<script type="text/javascript" src="../js/Set.js"></script>
+	<script type="text/javascript" src="../js/utest.js"></script>
+	<script type="text/javascript">
+
+		/* 计算版本号的数值
+		 * 版本号分三部分 major.minor.revision
+		 * 其中minor限1位数，revision限3位数，major位数不限。
+		 * 换算值：
+		 *     major*10000 + minor*1000 + revision
+		 * 例如，1.0.6    ==>  10006
+		 *      1.0.60   ==>  10060
+		 *      1.0.600  ==>  10600
+		 *      1.2.3456 ==>  12345   (第三部分最多取3位)
+		 *     12.3.4    ==> 123004
+		 */
+		function calculateVersionValue(ver) {
+			var a = ver.split('.');
+			var major = parseInt(a[0]);
+			if (a.length > 1)
+				var minor = parseInt(a[1].substring(0, 1));
+			if (a.length > 2)
+				var revision = parseInt(a[2].substring(0, 3));
+			return major * 10000 + minor * 1000 + revision;
+		}
+
+		var x = calculateVersionValue('1.0.6');
+		assert(x == 10006);
+		x = calculateVersionValue('1.0.60');
+		assert(x == 10060);
+		x = calculateVersionValue('1.0.600');
+		assert(x == 10600);
+		x = calculateVersionValue('1.2.3456');
+		assert(x == 12345);
+		x = calculateVersionValue('12.3.4');
+		assert(x == 123006);
+	</script>
+</head>
+<body>
+
+</body>
+</html>

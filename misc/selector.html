@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>JavaScript中的CSS选择器</title>
+	<script>
+		window.addEventListener("load", function () {
+			document.getElementById("div1").innerText = "DIV1中改变了的内容";
+			var list = document.getElementsByClassName("large");
+			console.log(list);
+			list = document.getElementsByTagName("div");
+			console.log(list);
+
+			var elMsg = document.getElementById("msg");
+			var props = [];
+
+			for (var x in window.navigator) {
+				props.push(x);
+				//elMsg.innerHTML += x + "<br/>";
+			}
+			list = props.sort();
+			var text = list.reduce(function(a, b) {
+				return a + b + "<br/>";
+			}, "")
+			elMsg.innerHTML = text;
+		});
+	</script>
+</head>
+<body>
+<div id="div1" class="large">DIV1</div>
+<div id="div2" class="large light">2</div>
+<div id="div3" class="small light">3</div>
+<div id="msg"></div>
+<form>
+	<label for="fg">选择颜色：</label>
+	<input id="fg" type="color">
+</form>
+</body>
+</html>

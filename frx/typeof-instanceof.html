@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>typeof、instanceof 的陷阱</title>
+    <script type="text/javascript">
+
+        function MessagePanel(el) {
+            var _div;
+            if (el)
+                _div = document.getElementById(el);
+            else {
+                _div = document.createElement('div');
+                _div.id = 'msg';
+                document.body.appendChild(_div);
+            }
+
+            this._div = _div;
+        }
+
+        MessagePanel.prototype.print = function () {
+            var text = [].slice.call(arguments).join(' ');
+            var el = document.createElement('div');
+            if (typeof el.textContent !== 'undefined')
+                el.textContent = text;
+            else
+                el.innerText = text;
+
+            el.style.color = 'green';
+            this._div.appendChild(el);
+        };
+
+
+        window.onload = function () {
+            var pnlTypeOf = new MessagePanel('type-of');
+            pnlTypeOf.print('typeof null:', typeof null);
+            pnlTypeOf.print('typeof document.images:', typeof document.images);
+            pnlTypeOf.print('typeof document.childNodes:', typeof document.childNodes, '【Safari: function】');
+            pnlTypeOf.print("typeof document.createElement('embed'):", typeof document.createElement('embed'), '【FireFox/Opera: function】');
+            pnlTypeOf.print("typeof document.createElement('object'):", typeof document.createElement('object'), '【FireFox/Opera: function】');
+            pnlTypeOf.print("typeof document.createElement('applet'):", typeof document.createElement('applet'), '【FireFox10－: function】');
+            pnlTypeOf.print('typeof /\d/i:', typeof /\d/i, '【应当是 RegExp】');
+            pnlTypeOf.print('typeof window.alert:', typeof window.alert, '【IE6－8: object】');
+
+
+            var pnlInstOf = new MessagePanel('inst-of');
+            pnlInstOf.print('document.images [HTMLCollection] instanceof Object ? ', document.images instanceof Object, '【IE8－: false（WRONG!）】');
+            pnlInstOf.print('[NodeList] instanceof Object ?', document.getElementsByName('div') instanceof Object, '【IE8－: false（WRONG!）】');
+            pnlInstOf.print('window == document ?', window == document, '【IE8－: true（WRONG!）】');
+            pnlInstOf.print('document == window ?', document == window, '【false】');
+            pnlInstOf.print("typeof document.all === 'undefined' ?", typeof document.all === 'undefined');
+            pnlInstOf.print('typeof document.all :', typeof document.all);
+            pnlInstOf.print('document.all.length = ', document.all.length);
+            pnlInstOf.print('typeof window.dispatchEvent :', typeof window.dispatchEvent, '【IE8－: undefined】');
+
+            var pnlOther = new MessagePanel('other');
+            pnlOther.print('typeof window.constructor:', typeof window.constructor, '【IE7－: undefined】');
+            pnlOther.print('typeof document.constructor:', typeof document.constructor, '【IE7－: undefined】');
+            pnlOther.print('typeof document.body.constructor:', typeof document.body.constructor, '【IE7－: undefined】');
+            try {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                pnlOther.print('typeof (new ActiveXObject("Microsoft.XMLHTTP")).abort = ', typeof xhr.abort);
+                pnlOther.print('typeof (new ActiveXObject("Microsoft.XMLHTTP")).constructor = ', typeof xhr.constructor, '【IE: undefined】');
+            }
+            catch(ex){
+                pnlOther.print('Not IE，no ActiveXObject');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>intypeof、instanceof 的陷阱</h1>
+<div> typeof 用于检测基本数据类型。怪异之处：</div>
+<div id="type-of"></div>
+<div> instanceof 用于检测对象类型：</div>
+<div id="inst-of"></div>
+<div>其它坑</div>
+<div id="other"></div>
+<script>
+
+</script>
+</body>
+</html>

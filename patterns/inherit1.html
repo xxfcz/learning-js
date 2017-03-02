@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>继承：类式继承</title>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+		// 类式继承：子类的prototype赋值为父类的实例
+
+		function SuperClass(x) {
+			this.superValue = x;
+			this.books = ["C++", "Java"];
+		}
+
+		SuperClass.prototype.getSuperValue = function () {
+			return this.superValue;
+		};
+
+		SuperClass.prototype.setSuperValue = function (x) {
+			this.superValue = x;
+		};
+
+		function SubClass(x, y) {
+			this.subValue = y;
+			// 问题点1：无法向父类构造函数实时传参x
+		}
+
+		// 所以只能在此固定父类构造函数的参数
+		SubClass.prototype = new SuperClass(100); // 并且伴随父类构造函数运行时的开销和副作用
+
+		SubClass.prototype.getSubValue = function () {
+			return this.subValue;
+		};
+
+		// 测试 ------------------------------------------------------------
+		var a = new SuperClass(1);
+		var b = new SubClass(2, 3);
+		assert(b.getSuperValue() === 100);                  // 父类成员被继承
+		assert(b instanceof SubClass);                      // 是子类的实例
+		assert(b instanceof SuperClass);                    // 也是父类的实例
+		assert(SubClass.prototype instanceof SuperClass);   // 类的继承关系
+		assert(b instanceof Object);                        // Object是所有对象的祖先
+
+
+		// 类式继承的问题 ----------------------------------------------------
+
+		// 问题1：new时无法向父类构造函数传参
+		var b2 = new SubClass(0, 30);
+
+		// 问题2：子类可能意外生成属于自己的、但与父类中同名的属性
+		assert(b2.getSuperValue() == 100);  // 取到父类的属性 superValue
+		b2.setSuperValue(20);               // 生成子类的属性 superValue
+		assert(b2.getSuperValue() == 20);
+
+		// 问题3：子类实例们共享同一个父类实例中的引用属性
+		assert(b.books.length == 2);
+		b2.books.push("JavaScript");    // 在b2中修改父类对象的引用属性 books
+		assert(b.books.length == 3);    // 导致b中相应属性意外变化
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

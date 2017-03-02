@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>简单工厂</title>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utils.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+
+		/** 版本1：构造函数不带参数 ************************
+		 */
+		(function v1() {
+
+			// 具体类A
+			function A() {
+			}
+
+			// 具体类B
+			function B() {
+			}
+
+			// 对象创建函数（工厂函数）
+			function createObject(tag) {
+				switch (tag) {
+					case "A":
+						return new A();
+					case "B":
+						return new B();
+					default:
+						return {};
+				}
+			}
+
+			// 测试 -----------------------------------
+			var a = createObject("A");
+			assert(a instanceof A);
+			var b = createObject("B");
+			assert(b instanceof B);
+		})();
+
+
+		/** 版本2：库代码与用户代码分离 ************************
+		 */
+		(function v2() {
+
+			// 库代码
+			var library = (function () {
+				// 具体类A
+				function A() {
+				}
+
+				// 具体类B
+				function B() {
+				}
+
+				// 对象创建函数（工厂函数）
+				function createObject(tag) {
+					switch (tag) {
+						case "A":
+							return new A();
+						case "B":
+							return new B();
+						default:
+							return {};
+					}
+				}
+
+				return {createObject: createObject};
+			})();
+
+
+			// 用户代码 -----------------------------------
+			(function client() {
+				var a = library.createObject("A");
+				assert(utils.typeof(a) === "A");
+				var b = library.createObject("B");
+				assert(utils.typeof(b) === "B");
+			})();
+		})();
+
+
+		// 版本3：构造函数带参数，且参数列表不尽相同
+		(function v3() {
+
+			var library = (function () {
+				// 具体类A -------------------------------------------------------------
+				function ConcreteClassA(id, name) {
+					this.id = id;
+					this.name = name;
+				}
+
+				// 具体类B -------------------------------------------------------------
+				function ConcreteClassB(id, name, color) {
+					this.id = id;
+					this.name = name;
+					this.color = color;
+				}
+
+				// 对象创建函数 -----------------------------------------------------------
+				function createObject(type) {
+					if (arguments.length < 3) {
+						throw new Error("createObject(type, id, name[, color]): at least 3 args needed!");
+					}
+					var id = arguments[1];
+					var name = arguments[2];
+					switch (type) {
+						case "A":
+							return new ConcreteClassA(id, name);
+						case "B":
+							if (arguments.length < 4)
+								throw new Error("createObject('B', id, name, date): 4 args needed!");
+							var date = arguments[3];
+							return new ConcreteClassB(id, name, date);
+						default:
+							return {};
+					}
+				}
+
+				return {createObject: createObject};
+			})();
+
+			/*****************************************************************************
+			 * 测试
+			 */
+			(function(){
+				var a = library.createObject("A", 1, "Xiao");
+				assert(utils.typeof(a) === "ConcreteClassA");
+				assert(a.id === 1);
+				assert(a.name === "Xiao");
+
+				var b = library.createObject("B", 2, "AlphaGo", "red");
+				assert(utils.typeof(b) === "ConcreteClassB");
+				assert(b.id === 2);
+				assert(b.color === "red");
+
+				try {
+					var b1 = createObject("B", 3, "Lishishi");
+				}
+				catch (ex) {
+					console.log(ex.message);
+				}
+			})();
+		})();
+
+	</script>
+</head>
+<body>
+<div>简单工厂模式Simple Factory根据提供给它的数据，返回一个类的实例。通常它返回的类都有一个公共的父类（或者接口对象）。</div>
+<div>简单工厂的作用是实例化对象，而不需要客户了解这个对象属于哪个具体的子类。简单工厂实例化的类具有相同的接口或者基类，在子类比较固定并不需要扩展时，可以使用简单工厂。如数据库生产工厂就是简单工厂的一个应用。</div>
+<div>
+	采用简单工厂的优点是可以使用户根据参数获得对应的类实例，避免了直接实例化类，降低了耦合性；缺点是可实例化的类型在编译期间已经被确定，如果增加新类
+	型，则需要修改工厂，不符合OCP（开闭原则）的原则。简单工厂需要知道所有要生成的类型，当子类过多或者子类层次过多时不适合使用。
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>IE6的console</title>
+    <script type="text/javascript" src="lib/console.js"></script>
+    <script>
+        window.onload = function () {
+            console.log('我为IE6-8做了个模拟的控制台输出！');
+
+
+
+            var el = document.createElement('div');
+            el.innerText = '测试一下！';
+            document.body.appendChild(el);
+
+        };
+
+    </script>
+</head>
+<body>
+</body>
+</html>

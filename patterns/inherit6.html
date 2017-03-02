@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>继承：寄生组合式继承</title>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+		// 原型式继承
+		function inheritObject(o) {
+			// 过渡函数
+			function F() {
+			}
+
+			F.prototype = o;
+			return new F();
+		}
+
+		// 寄生组合式继承
+		function inheritPrototype(subClass, superClass) {
+			// 将父类的原型对象设置为子类的原型
+			subClass.prototype = inheritObject(superClass.prototype);
+			// 修正子类原型的constructor
+			subClass.prototype.constructor = subClass;
+		}
+
+
+		// 应用 -------------------------------------------------------
+
+		function SuperClass(id, name) {
+			// 值类型属性
+			this.id = id;
+			this.name = name;
+			// 引用类型属性
+			this.books = ["C++", "Java"];
+		}
+
+		SuperClass.prototype.getId = function () {
+			return this.id;
+		};
+
+		SuperClass.prototype.getName = function () {
+			return this.name;
+		};
+
+		SuperClass.prototype.setName = function (name) {
+			this.name = name;
+		};
+
+
+		function SubClass(id, name, color) {
+			// 调用父类构造函数，并传参
+			SuperClass.call(this, id, name);
+			this.color = color;
+		}
+
+		// 先定义继承关系
+		inheritPrototype(SubClass, SuperClass);
+
+		// 再对子类添加原型方法
+		SubClass.prototype.getColor = function () {
+			return this.color;
+		};
+
+
+		(function () {
+			var a = new SuperClass(1, "p1");
+			var b = new SubClass(2, "c2", "red");
+			assert(a.id === 1);
+			assert(a.name === "p1");
+
+			assert(b.id === 2);              // 继承了public属性
+			assert(b.getName() === "c2");    // 继承了public方法
+			assert(a.books !== b.books);    // 引用类型的属性，各不相干
+		})();
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

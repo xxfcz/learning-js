@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript">
+		var Coin = xutil.enumeration({Penny: 1, Nickle: 5, Dime: 10, Quarter: 25});
+		var c = Coin.Dime;
+		console.log('c instance of Coin:', c instanceof Coin);
+		console.log('c.constructor == Coin:', c.constructor == Coin);
+
+		var ClinicServiceType = xutil.enumeration({"预约挂号": 0, "门诊加号": 1, "约名医": 2, "工作室": 3, "名医上门": 4, "名医在线": 5});
+		console.log(ClinicServiceType.名医在线.toString());
+		console.log(ClinicServiceType.名医在线.valueOf());
+
+		console.log(Coin.Dime);
+	</script>
+</head>
+<body>
+
+</body>
+</html>

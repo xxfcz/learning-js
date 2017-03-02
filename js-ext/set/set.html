@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>Set模板引擎</title>
+	<script src="set.js"></script>
+	<script>
+		var html = set("<html><div class='border' data-set-text='text'>文字</div></html>", {myClass: 'red', text: '真实文字'});
+		console.log(html);
+	</script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>优惠券 单元测试</title>
+	<script src="../js/utest.js"></script>
+	<script src="../vendor/angular.js"></script>
+	<script src="js/accountsBiz.js"></script>
+
+	<script>
+		// 抵扣券
+		var d = {
+			"id": 1,
+			"trophyType": 3,
+			"useLimitService": 1,
+			"couponAmount": 100
+		};
+		var c = new Coupon(d);
+		console.log(c, c.toString());
+
+		// 免费抵扣券
+		d = {
+			"id": 1,
+			"trophyType": 3,
+			"useLimitService": 1,
+			"couponAmount": 100
+		};
+		c = new Coupon(d);
+		console.log(c, c.toString());
+
+
+		// 折扣券
+		d = {
+			"id": 3,
+			"trophyType": 2,
+			"useLimitService": 2,
+			"couponAmount": 100,
+			"couponRate": 80
+		};
+		c = new Coupon(d);
+		console.log(c, c.toString());
+
+
+		var c1 = new Coupon({
+			id: 11,
+			state: 0,
+			drawTime: 1453358346000,
+			topAmount: 30,
+			validEndTime: 1455465600000,
+			useTime: -2209017600000,
+			useDescribe: "",
+			accountID: 340782,
+			trophyName: "一米医生APP“名医在线”8.5折优惠券",
+			useLimitService: 2,
+			useLimitAmount: 20,
+			trophyType: Coupon.TROPHY_DISCOUNT,
+			couponRate: 85,
+			couponAmount: 0,
+			trophyID: "098D5AD3-D0FC-475C-BE65-53234ABEBE55",
+			trophyNo: "091439205698",
+			createTime: 1453358351000,
+			userLimitSource: 3,
+			validBeginTime: 1452787200000
+		});
+
+		var b = c1.getDeduction(10);
+		assert(b == 0);
+		b = c1.getDeduction(100);
+		assert(Math.abs(b - 15) < EPS);
+		b = c1.getDeduction(1000);
+		assert(b == 30);
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

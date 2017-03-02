@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>杂项</title>
+    <script>
+
+        function foo(a, b, c) {
+            console.log('foo(', [].slice.call(arguments).join(',') , '): c === void 0 ?', c === void 0);
+        }
+
+        foo();
+        foo(1);
+        foo(1,2);
+        foo(1,2,3);
+
+
+        console.log(undefined === void 0);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

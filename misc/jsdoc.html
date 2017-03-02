@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>JSDoc对函数重载、不定参数的支持</title>
+	<script>
+		/**
+		 * @function foo
+		 * @param {...number}
+		 */
+
+		/**
+		 * @function foo(2)
+		 * @param {string, ...number}
+		 */
+
+		/** @example
+		 *    foo('abc');
+		 *    foo('abc', 1);
+		 *    foo('abc', 1, 2, 3);
+		 *    foo(1);
+		 *    foo(1, 2);
+		 *    foo(1, 2, 3);
+		 */
+		function foo() {
+
+		}
+
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

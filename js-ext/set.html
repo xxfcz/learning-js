@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/Set.js"></script>
+	<script type="text/javascript">
+		function test01() {
+			var s1 = new Set(1, 2, 3, 4, 5, 6, 7, 8);
+			document.writeln(s1.toString());
+			s1.add(10);
+			s1.remove(3);
+			s1.add('Abc');
+			console.log(s1.toJSON());
+		}
+
+		function test02() {
+			var s1 = new Set(9);
+			var s2 = new SingletonSet(9);
+			//s2.add(7);
+			console.log('s2 instanceof SingletonSet:', s2 instanceof SingletonSet);
+			console.log('s2 instanceof Set:', s2 instanceof Set);
+			console.log('s2.equals(s1)', s2.equals(s1));
+			console.log('s1.equals(s2)', s1.equals(s2));
+		}
+
+		function test03() {
+			var s = new NonNullSet(3, undefined, 7, 9);
+			s.add(6);
+		}
+
+		function test04() {
+			var StringSet = filteredSetSubclass(NonNullSet, function (x) {
+				return typeof x === "string";
+			});
+
+			var s = new StringSet();
+			s.add("I");
+			s.add("love");
+			s.add("you");
+			s.add("I");
+
+			document.writeln(s);
+		}
+
+		test04();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

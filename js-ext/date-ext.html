@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>Date 扩展</title>
+	<script src="js/js_ext.js"></script>
+	<script src="js/utest.js"></script>
+	<script>
+
+		(function () {
+			var d1 = new Date("2016-02-17");
+			console.log(d1.toString());
+			var d2 = new Date("2016-2-17");
+			console.log(d2.toString());
+			var x = Math.abs(d1.getTime() - d2.getTime()) / 1000 / 3600;
+			console.log("时差：", x);
+
+			d1 = new Date("2016/02/17");
+			console.log(d1.toString());
+			d2 = new Date("2016/2/17");
+			console.log(d2.toString());
+			x = Math.abs(d1.getTime() - d2.getTime()) / 1000 / 3600;
+			console.log("时差：", x);
+		}());
+
+
+		(function () {
+			var d1 = new Date("2016-2-17");
+			var d2 = new Date("2016-2-17");
+			var b = d1.isSameDay(d2);
+			assert(b);
+			d2 = new Date("2016/2/16");
+			assert(!d1.isSameDay(d2));
+		}());
+
+		(function(){
+			var d1 = new Date("2016/3/31");
+			d1.setDate(1);
+			var d2 = d1.addMonths(1);
+			console.log(d2);
+			assert(d2.isSameDay(new Date("2016/4/1")));
+		})();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>getElementById</title>
+</head>
+<body>
+<div id="first">这是第一段。</div>
+<div id="Second">这是第二段。</div>
+<form>
+    <label>请输入一点文字吧：
+        <input name="third" id="id_third" type="text">
+    </label>
+</form>
+
+<script>
+        var e = document.getElementById('first');
+        alert(e.id);
+        e = document.getElementById('SECOND');
+        if(e)
+            alert('这是IE，对id不区分大小写：' + e.id);
+        else
+            alert('这个浏览器比较标准，对id是区分大小的');
+        e = document.getElementById('third');
+        if (e)
+            alert('这是IE，把name也当成id了');
+        else
+            alert('这个浏览器比较标准，不会把name当成id');
+</script>
+</body>
+</html>

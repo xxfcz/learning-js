@@ -1,0 +1,16 @@
+{
+  "name": "learningjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive algo-fun\\qa"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.16.1",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0"
+  }
+}

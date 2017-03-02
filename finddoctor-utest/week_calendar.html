@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>周日历</title>
+	<script type="text/javascript" src="../js/js_ext.js"></script>
+	<script type="text/javascript" src="js/appointments.js"></script>
+
+	<script type="text/javascript">
+
+		var plans1 = [{
+			"date": "2016-02-17",
+			"availableCount": 5,
+			"hours": [{"time": "14:00", "tag": 840}, {"time": "14:48", "tag": 888}, {
+				"time": "15:36",
+				"tag": 936
+			}, {"time": "16:24", "tag": 984}, {"time": "17:12", "tag": 1032}],
+			"address": "你的家",
+			"planId": 56,
+			"end": "18:00",
+			"begin": "14:00"
+		}, {
+			"date": "2016-02-24",
+			"availableCount": 5,
+			"hours": [{"time": "14:00", "tag": 840}, {"time": "14:48", "tag": 888}, {
+				"time": "15:36",
+				"tag": 936
+			}, {"time": "16:24", "tag": 984}, {"time": "17:12", "tag": 1032}],
+			"address": "你的家",
+			"planId": 56,
+			"end": "18:00",
+			"begin": "14:00"
+		}, {
+			"date": "2016-02-23",
+			"availableCount": 5,
+			"hours": [{"time": "10:00", "tag": 600}, {"time": "10:24", "tag": 624}, {
+				"time": "10:48",
+				"tag": 648
+			}, {"time": "11:12", "tag": 672}, {"time": "11:36", "tag": 696}],
+			"address": "我的家",
+			"planId": 55,
+			"end": "12:00",
+			"begin": "10:00"
+		}, {
+			"date": "2016-03-01",
+			"availableCount": 5,
+			"hours": [{"time": "10:00", "tag": 600}, {"time": "10:24", "tag": 624}, {
+				"time": "10:48",
+				"tag": 648
+			}, {"time": "11:12", "tag": 672}, {"time": "11:36", "tag": 696}],
+			"address": "我的家",
+			"planId": 55,
+			"end": "12:00",
+			"begin": "10:00"
+		}];
+		var plans2 = [
+			{
+				"date": "2016-2-21",
+				"availableCount": 3,
+				"hours": [
+					{
+						"time": "14:30",
+						"tag": 690
+					},
+					{
+						"time": "14:40",
+						"tag": 700
+					},
+					{
+						"time": "14:50",
+						"tag": 710
+					}
+				],
+				"address": "红十字会",
+				"planId": 26,
+				"end": "15:00",
+				"begin": "14:30"
+			},
+			{
+				"date": "2016-2-26",
+				"availableCount": 3,
+				"hours": [
+					{
+						"time": "11:30",
+						"tag": 690
+					},
+					{
+						"time": "11:40",
+						"tag": 700
+					},
+					{
+						"time": "11:50",
+						"tag": 710
+					}
+				],
+				"address": "红十字会",
+				"planId": 26,
+				"end": "12:00",
+				"begin": "11:30"
+			}
+		];
+
+
+		var weeks = appointments.makeCalendar(plans1);
+		console.log(weeks);
+	</script>
+</head>
+<body>
+
+</body>
+</html>

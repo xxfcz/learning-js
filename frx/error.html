@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>IE中的Error对象</title>
+    <script type="text/javascript" src="lib/json2.js"></script>
+</head>
+<body>
+<script>
+    try {
+        addalert("bad call");
+    }
+    catch(e) {
+        document.write ("Error Message: " + e.message);
+        document.write ("<br />");
+        document.write ("Error Code: ");
+        document.write (e.number & 0xFFFF);
+        document.write ("<br />");
+        document.write ("Error Name: " + e.name);
+        document.write ("<br />");
+        document.write("e: " + JSON.stringify(e) + "<br />");
+        document.write("e.stack: " + JSON.stringify(e.stack)+ "<br />");
+    }
+</script>
+</body>
+</html>

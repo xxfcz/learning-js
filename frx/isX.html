@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>isX() 测试</title>
+    <script type="text/javascript" src="lib/utest.js"></script>
+    <script type="text/javascript" src="lib/isX.js"></script>
+    <script>
+        window.onload = function () {
+            var ut = new Utest('output');
+
+            ut.assert(isNaN('abc'), "isNaN('abc') === true");
+            ut.print('正则表达式：', /test/i.toString());
+            ut.print('document.toString():', document.toString());
+            ut.print('document.images.toString():', document.images.toString());
+            ut.print("document.getElementsByName('div').toString():", document.getElementsByName('div').toString());
+
+            ut.assert($.isNull(null) === true, '$.isNull(null) === true');
+            ut.assert($.isNull(undefined) === false, '$.isNull(undefined) === false');
+            ut.assert($.isNull(NaN) === false, '$.isNull(NaN) === false');
+            ut.assert($.isNull(0) === false, '$.isNull(0) === false');
+            ut.assert($.isNull(10) === false, '$.isNull(10) === false');
+            ut.assert($.isNull(-3.14) === false, '$.isNull(-3.14) === false');
+            ut.assert($.isNull('Abc') === false, '$.isNull("abc") === false');
+            ut.assert($.isNull({x:1, y:2}) === false, '$.isNull({x:1, y:2}) === false');
+            ut.assert($.isUndefined(null) === false, '$.isUndefined(null) === false');
+            ut.assert($.isUndefined(undefined) === true, '$.isUndefined(undefined) === true');
+            ut.assert($.isUndefined(NaN) === false, '$.isUndefined(NaN) === false');
+            ut.assert($.isUndefined(0) === false, '$.isUndefined(0) === false');
+            ut.assert($.isUndefined(void 0) === true, '$.isUndefined(void 0) === true');
+            ut.assert($.isUndefined('Abc') === false, '$.isUndefined("abc") === false');
+            ut.assert($.isUndefined({x:1, y:2}) === false, '$.isUndefined({x:1, y:2}) === false');
+
+            ut.assert(null === null, 'null === null');
+            ut.assert(NaN !== NaN, 'NaN !== NaN');
+            ut.assert($.isNaN(NaN), '$.isNaN(NaN) === true');
+            ut.assert(!$.isNaN(10), '$.isNaN(10) === false');
+            ut.assert(!$.isNaN('abc'), '$.isNaN("abc") === false');
+            ut.assert(!$.isNaN({x:1, y:2}), '$.isNaN({x:1, y:2}) === false');
+        };
+    </script>
+</head>
+<body>
+<div id="output"></div>
+</body>
+</html>

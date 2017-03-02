@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>继承：构造函数继承</title>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+		/**
+		 *  构造函数继承：子类的构造函数调用父类的构造函数
+		 */
+
+		function SuperClass(id, name) {
+			// 值类型属性
+			this.id = id;
+			this.name = name;
+			// 引用类型属性
+			this.books = ["C++", "Java"];
+
+			this.getId = function () {
+				return this.id;
+			};
+
+			this.getName = function () {
+				return this.name;
+			};
+
+			this.setName = function (name) {
+				this.name = name;
+			};
+		}
+
+		function SubClass(id, name, color) {
+			// 调用父类构造函数，并传参
+			SuperClass.call(this, id, name);
+			this.color = color;
+
+			this.getColor = function () {
+				return this.color;
+			};
+		}
+
+
+		// 测试 ------------------------------------------------------------
+		var a = new SuperClass(1, "父1");
+		var b = new SubClass(2, "子2", "红色");
+		assert(b instanceof SubClass);                      // 是子类的实例
+		assert(b.id === 2);                  // 父类成员被继承
+		assert(b.getId() === 2);
+
+		// 解决了类式继承的问题 ----------------------------------------------------
+
+		// 解决问题1：new时无法向父类构造函数传参
+		var b2 = new SubClass(0, "b2", "green");
+		assert(b2.id === 0);
+
+		// 解决问题2：子类可能意外生成属于自己的、但与父类中同名的属性
+		assert(b2.name == "b2");              // 取到父类的属性 name
+		b2.setName("bbb");                    // 不会生成子类自己的属性 name
+		assert(b2.name == "bbb" && b2.name == b2.getName());
+
+		// 解决问题3：子类实例们共享同一个父类实例中的引用属性
+		assert(b.books.length == 2);
+		b2.books.push("JavaScript");    // 在b2中修改父类对象的引用属性 books
+		assert(b.books.length == 2);    // b中相应属性的内容不会变化
+
+		// 构造函数继承的问题 ----------------------------------------------------
+
+		// 问题1：类型层级关系没有建立
+		assert(!(b instanceof SuperClass));                    // 子类实例不是父类的实例
+		assert(!(SubClass.prototype instanceof SuperClass));   // 类的继承关系
+
+		// 问题2：共享方法的代码没有定义在prototype上，而是每个实例都有一份，浪费
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

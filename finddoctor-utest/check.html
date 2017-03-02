@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>检查</title>
+	<script src="../js/utest.js"></script>
+	<script src="../js/js_ext.js"></script>
+	<script>
+
+		/**
+		 * 验证身份证号码及生日、性别
+		 * @param cardNo String, 18位身份证号码
+		 * @param birthdate Date, 出生日期
+		 * @param gender String, 性别, 取值"男"或"女"
+		 * @returns {number} 错误码，0=正确，详见函数后的常量定义
+		 */
+		function checkIdCardNo(cardNo, birthdate, gender) {
+			var rgx = /^\d{6}(\d{4})(\d{2})(\d{2})(\d{3})[0-9X]$/;
+			var ok = rgx.test(cardNo);
+			if (!ok)
+				return checkIdCardNo.ERR_FORMAT;
+
+			var dt = new Date([RegExp.$1, RegExp.$2, RegExp.$3].join("/"));
+			ok = dt.isSameDay(birthdate);
+			if (!ok)
+				return checkIdCardNo.ERR_BIRTHDATE;
+
+			var rem = RegExp.$4 % 2;
+			ok = (rem == 0 && gender == "女" || rem == 1 && gender == "男");
+			if (!ok)
+				return checkIdCardNo.ERR_GENDER;
+
+			return checkIdCardNo.OK;
+		}
+
+		checkIdCardNo.OK = 0;
+		checkIdCardNo.ERR_FORMAT = 1;       // 身份证号格式错误
+		checkIdCardNo.ERR_BIRTHDATE = 2;    // 出生日期不匹配
+		checkIdCardNo.ERR_GENDER = 3;       // 性别不匹配
+
+
+		var r = checkIdCardNo("432822197612262673", new Date("1976/12/26"));
+		assert(r.ok);
+		r = checkIdCardNo("43282219761226267X", new Date("1976/12/26"));
+		assert(r.ok);
+		r = checkIdCardNo("43282216267", new Date("1976/12/26"));
+		assert(!r.ok && r.errNo == checkIdCardNo.ERR_FORMAT);
+		r = checkIdCardNo("432822197712262673", new Date("1976/12/26"));
+		assert(!r.ok && r.errNo == checkIdCardNo.ERR_MATCH);
+	</script>
+</head>
+<body>
+
+</body>
+</html>

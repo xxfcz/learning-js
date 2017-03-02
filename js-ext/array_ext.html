@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title></title>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/js_ext.js"></script>
+	<script type="text/javascript">
+
+		/*
+				function test1() {
+					var a = [1, 2, 3];
+					var s = String.format("{0}", "abc");
+					console.log(s);
+				}
+		*/
+
+		function intComp(e1, e2) {
+			return e1 - e2;
+		}
+
+		function collect(list) {
+			if (list.length > 1 && list[0] != 0)
+				return -list[0];
+			else
+				return list[0];
+		}
+
+		function test2() {
+			var a = [1, 2, 3, 4, 3, 2, 0, 3];
+			var b = a.unique(intComp, collect);
+			console.log(a);
+			console.log("0, 1, -2, -3, 4: ", b); // 0, 1, -2, -3, 4
+			console.log("不作收集处理：", a.unique(intComp));
+
+			a = [];
+			b = a.unique(intComp, collect);
+			console.log("空数组：", a);
+			console.log(b);
+
+			a = [3];
+			b = a.unique(intComp, collect);
+			console.log("单元素数组：", a);
+			console.log(b);
+
+			a = [3, 3];
+			b = a.unique(intComp, collect);
+			console.log("双元素数组：", a);
+			console.log(b);
+		}
+
+
+		test2();
+
+		(function () {
+			var a = [{n: 1, list: [1, 11]},
+				{n: 2, list: [2, 22]},
+				{n: 1, list: [111]},
+				{n: 2, list: [222, 22222]}
+			];
+
+			var b = a.unique(function (e1, e2) {
+				return intComp(e1.n, e2.n);
+			}, function (slice) {
+				return slice.reduce(function (a, b) {
+					b.list.forEach(function (e) {
+						a.list.push(e);
+					});
+					return a;
+				})
+			});
+
+			console.log(b);
+
+		}());
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

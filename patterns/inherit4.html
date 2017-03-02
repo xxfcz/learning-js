@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>原型式继承</title>
+	<script src="../js/js_ext.js"></script>
+	<script src="../js/utest.js"></script>
+	<script>
+		// 原型式继承
+		function inheritObject(o) {
+			// 过渡函数
+			function F() {
+			}
+
+			F.prototype = o;
+			return new F();
+		}
+
+
+		var book = {
+			id: 3,
+			name: "js book",
+			alikeBooks: ["css book", "html book"]
+		};
+
+
+		var newBook = inheritObject(book);
+
+		// 被继承属性的读写不对等性 ---------------------------------------------------
+
+		// 被继承的属性，读：引用原型中的 name 属性
+		assert(newBook.name === "js book");
+		// 被继承的属性，写：在对象中创建了新的同名属性
+		newBook.name = "ajax book";
+		assert(newBook.__proto__.name == "js book");    // 不影响原型的同名属性值
+
+
+		// 被继承的引用属性：意外修改
+		newBook.alikeBooks.push("xml book");
+		assert(newBook.alikeBooks === book.alikeBooks); // 原型和新实例引用了同一个引用属性
+		// 除非显式写一次：
+		newBook.alikeBooks = ["xml book"];              // 在对象中创建了新的同名属性
+		assert(newBook.alikeBooks !== book.alikeBooks); // 不再引用原型的同名属性
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

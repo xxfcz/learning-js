@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>JSON驼峰命名的大小写转换</title>
+
+	<script>
+
+		function lowerCamel(key, value) {
+			if (value && typeof value === 'object') {
+				var replacement = {};
+				for (var k in value) {
+					if (Object.hasOwnProperty.call(value, k)) {
+						replacement[k && k.charAt(0).toLowerCase() + k.substring(1)] = value[k];
+					}
+				}
+				return replacement;
+			}
+			return value;
+		}
+		//JSON.stringify(myVal, lowerCamel);
+
+
+		function upperCamel(key, value) {
+			if (value && typeof value === 'object')
+				for (var k in value) {
+					if (/^[a-z]/.test(k) && Object.hasOwnProperty.call(value, k)) {
+						value[k.charAt(0).toUpperCase() + k.substring(1)] = value[k];
+						delete value[k];
+					}
+				}
+			return value;
+		}
+		// JSON.parse(text, upperCamel);
+
+		var a = {
+			ID: 1,
+			Name: "ABC",
+			ServiceItems: [
+				{
+					No: "#$%!GADG",
+					ServiceTitle: "VIP家庭医生（3人）"
+				}
+			]
+		};
+
+		var lo = JSON.stringify(a, lowerCamel);
+		console.log("lo: ", lo);
+
+		var up = JSON.parse(lo, upperCamel);
+		console.log("up: ", up);
+	</script>
+</head>
+<body>
+
+</body>
+</html>

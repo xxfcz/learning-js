@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+   <title>JSON</title>
+   <script type="text/javascript" src="lib/console.js"></script>
+   <script type="text/javascript" src="lib/json2.js"></script>
+</head>
+<body>
+<script>
+
+   function test1() {
+      var o = {
+         x: 10,
+         y: 20,
+         valueOf: '胡说！'
+      };
+
+      console.log("Object.prototype.hasOwnProperty.call(o, 'toString')：" + Object.prototype.hasOwnProperty.call(o, 'toString'));
+      console.log('o.hasOnwProperty("valueOf")：', o.hasOwnProperty('valueOf'));
+      console.log('JSON.stringify 结果：' + JSON.stringify(o));
+   }
+
+
+   console.log('开始测试！' + new Date().toLocaleString());
+   test1();
+
+</script>
+</body>
+</html>

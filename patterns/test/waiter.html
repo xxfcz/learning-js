@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>Waiter</title>
+	<script src="../js/waiter.js"></script>
+	<script>
+		var waiter = new Waiter();
+		var d = (function () {
+			var d = waiter.Deferred();
+			setTimeout(function () {
+				console.log("标志解决！");
+				d.resolve();
+			}, 3000);
+			return d;
+		})();
+
+		waiter
+			.when(d)
+			.done(function () {
+				console.log("成功！");
+			})
+			.fail(function () {
+				console.log("失败！");
+			});
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

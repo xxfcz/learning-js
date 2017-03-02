@@ -1,0 +1,89 @@
+/**
+ * Created by Administrator on 2017/3/1.
+ */
+
+
+var Utest = (function () {
+    var EPS = 1e-6;
+
+    var util = {};
+
+    util.text = function (el, str) {
+        var prop;
+        if (typeof el.textContent !== 'undefined')
+            prop = 'textContent';
+        else
+            prop = 'innerText';
+        if (typeof str === 'undefined')
+            return el[prop];
+        el[prop] = str;
+    };
+
+    util.html = function (el, str) {
+        var prop;
+        if (typeof el.innerHtml !== 'undefined')
+            prop = 'innerHtml';
+        else
+            prop = 'textContent';
+        if (typeof str === 'undefined')
+            return el[prop];
+        el[prop] = str;
+    };
+
+
+    function Utest(el) {
+        var _div;
+        if (el)
+            _div = document.getElementById(el);
+        else {
+            _div = document.createElement('div');
+            _div.id = 'utest';
+            document.body.appendChild(_div);
+        }
+
+        this._div = _div;
+    }
+
+
+    Utest.prototype.print = function () {
+        var text = [].slice.call(arguments).join(' ');
+        var el = document.createElement('div');
+        util.text(el, text);
+        el.style.border = 'solid 1px gray';
+        this._div.appendChild(el);
+        return el;
+    };
+
+    Utest.prototype.assert = function (predicate, msg) {
+        var el, loc;
+        if (predicate) {
+            try {
+                throw new Error();
+            } catch (e) {
+                //loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
+                el = this.print(msg);
+                el.style.color = 'green';
+            }
+        }
+        else {
+            try {
+                throw new Error();
+            } catch (e) {
+                // loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
+                el = this.print(msg);
+                el.style.color = 'red';
+                if(typeof e.stack !== 'undefined') {
+                    var stack = document.createElement('div');
+                    stack.style.textIndent = '2em';
+                    util.text(stack, e.stack);
+                    el.appendChild(stack);
+                }
+            }
+        }
+    };
+
+    Utest.EPS = EPS;
+
+    return Utest;
+})();
+

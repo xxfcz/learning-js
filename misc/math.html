@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+	<title>Math类</title>
+	<script src="js/utest.js"></script>
+	<script>
+
+		function floatEqual(a, b) {
+			const EPS = 1e-6;
+			return Math.abs(a - b) < EPS;
+		}
+
+		function testFloatEqual() {
+			assert(Math.round(12.4) == 12);
+			assert(Math.round(12.5) == 13);
+			assert(Math.ceil(12.4) == 13);
+			assert(Math.ceil(-12.4) == -12);
+
+			assert(floatEqual(Math.ceil(12.3434 * 100) * 0.01, 12.35));
+			var x = 12.3456;
+			assert(floatEqual(Math.ceil(x * 100) * 0.01, 12.35));
+			assert(floatEqual(Math.ceil(12.35 * 100) * 0.01, 12.35));
+			y = 100 - x;
+			assert(floatEqual(y, 87.6544));
+			assert(floatEqual(Math.ceil(y * 100) * 0.01, 87.66));
+			s = "12.3456568";
+			var rgx = /^(\d*.\d{0,2})\d*$/;
+			s.match(rgx);
+			assert(RegExp.$1 == "12.34");
+		}
+
+		(function () {
+			var a = (Math.random()+1).toString().replace('.', '');
+			console.log(a);
+		})();
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
