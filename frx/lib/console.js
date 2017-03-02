@@ -2,9 +2,6 @@
  * Created by Administrator on 2017/2/27.
  */
 
-/*
-
-// TODO: 兼容IE6
 
 (function () {
     if (typeof window.console !== 'undefined')
@@ -49,9 +46,9 @@
             onload_saved();
     }
 })();
-*/
 
 
+/*
 (function () {
     if (typeof window.console === 'undefined') {
         window.console = {
@@ -64,4 +61,5 @@
         }
     }
 })();
+*/
 
