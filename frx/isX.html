@@ -15,6 +15,13 @@
             ut.print('document.toString():', document.toString());
             ut.print('document.images.toString():', document.images.toString());
             ut.print("document.getElementsByName('div').toString():", document.getElementsByName('div').toString());
+            ut.print('Object.prototype.toString.call([]):', Object.prototype.toString.call([]));
+            ut.print('typeof 1:', typeof 1);
+            ut.print('typeof new Number():', typeof new Number());
+            ut.print('Object.prototype.toString.call(new Number()):', Object.prototype.toString.call(new Number()));
+
+
+            ut.print('*********************************************************');
 
             ut.assert($.isNull(null) === true, '$.isNull(null) === true');
             ut.assert($.isNull(undefined) === false, '$.isNull(undefined) === false');
@@ -23,21 +30,62 @@
             ut.assert($.isNull(10) === false, '$.isNull(10) === false');
             ut.assert($.isNull(-3.14) === false, '$.isNull(-3.14) === false');
             ut.assert($.isNull('Abc') === false, '$.isNull("abc") === false');
-            ut.assert($.isNull({x:1, y:2}) === false, '$.isNull({x:1, y:2}) === false');
+            ut.assert($.isNull({ x: 1, y: 2 }) === false, '$.isNull({x:1, y:2}) === false');
             ut.assert($.isUndefined(null) === false, '$.isUndefined(null) === false');
             ut.assert($.isUndefined(undefined) === true, '$.isUndefined(undefined) === true');
             ut.assert($.isUndefined(NaN) === false, '$.isUndefined(NaN) === false');
             ut.assert($.isUndefined(0) === false, '$.isUndefined(0) === false');
             ut.assert($.isUndefined(void 0) === true, '$.isUndefined(void 0) === true');
             ut.assert($.isUndefined('Abc') === false, '$.isUndefined("abc") === false');
-            ut.assert($.isUndefined({x:1, y:2}) === false, '$.isUndefined({x:1, y:2}) === false');
+            ut.assert($.isUndefined({ x: 1, y: 2 }) === false, '$.isUndefined({x:1, y:2}) === false');
 
             ut.assert(null === null, 'null === null');
             ut.assert(NaN !== NaN, 'NaN !== NaN');
             ut.assert($.isNaN(NaN), '$.isNaN(NaN) === true');
             ut.assert(!$.isNaN(10), '$.isNaN(10) === false');
             ut.assert(!$.isNaN('abc'), '$.isNaN("abc") === false');
-            ut.assert(!$.isNaN({x:1, y:2}), '$.isNaN({x:1, y:2}) === false');
+            ut.assert(!$.isNaN({ x: 1, y: 2 }), '$.isNaN({x:1, y:2}) === false');
+
+            ut.assert($.isNumber(1), ' 1 是Number');
+            var objN = new Number(10);
+            ut.assert($.isNumber(objN), 'new Number() 是 Number');
+            ut.assert(!$.isNumber(null), 'null 不是 Number');
+            ut.assert(!$.isNumber(NaN), 'NaN 不是 Number');
+            ut.assert(!$.isNumber(undefined), 'undefined 不是 Number');
+
+            ut.assert($.isBoolean(true), 'true 是 Boolean');
+            ut.assert($.isBoolean(new Boolean()), 'new Boolean() 是 Boolean');
+            ut.assert(!$.isBoolean(1), '1 不是 Boolean');
+
+            ut.assert($.isString('abc'), "'abc'是String");
+            ut.assert(!$.isString(123), '123 不是 String');
+
+            var f1 = function () { };
+            ut.assert($.isFunction(f1));
+            ut.assert(!$.isFunction(23));
+
+            ut.assert($.isArray([]));
+            ut.assert(!$.isArray({}));
+
+            ut.assert($.isDate(new Date()));
+            ut.assert(!$.isDate(new Date('abcdi')));
+            ut.assert(!$.isDate('2012-5-3'));
+
+            ut.assert($.isRegExp(/abc/i));
+            ut.assert(!$.isRegExp('abc/i'));
+
+            ut.assert($.isWindow(window));
+            ut.assert(!$.isWindow(window.document));
+
+            ut.assert($.isDocument(document));
+            ut.assert(!$.isDocument(window));
+
+            ut.print('document.images:', Object.prototype.toString.call(document.images));
+            ut.print('document.images.item:',  Object.prototype.toString.call(document.images.item));
+            ut.assert($.isNodeList(document.images), '$.isNodeList(document.images)');
+            ut.assert($.isNodeList(document.getElementsByName('div')), "$.isNodeList(document.getElementsByName('div'))");
+            if (document.querySelectorAll)
+                ut.assert($.isNodeList(document.querySelectorAll('div>p')), "$.isNodeList(document.querySelectorAll('div>p'))");
         };
     </script>
 </head>

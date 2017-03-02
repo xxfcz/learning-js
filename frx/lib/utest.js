@@ -56,23 +56,14 @@ var Utest = (function () {
 
     Utest.prototype.assert = function (predicate, msg) {
         var el, loc;
-        if (predicate) {
-            try {
-                throw new Error();
-            } catch (e) {
-                //loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
-                el = this.print(msg);
-                el.style.color = 'green';
-            }
-        }
-        else {
+        if (!predicate) {
             try {
                 throw new Error();
             } catch (e) {
                 // loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
                 el = this.print(msg);
                 el.style.color = 'red';
-                if(typeof e.stack !== 'undefined') {
+                if (typeof e.stack !== 'undefined') {
                     var stack = document.createElement('div');
                     stack.style.textIndent = '2em';
                     util.text(stack, e.stack);

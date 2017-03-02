@@ -6,17 +6,24 @@
     <title>杂项</title>
     <script>
 
-        function foo(a, b, c) {
-            console.log('foo(', [].slice.call(arguments).join(',') , '): c === void 0 ?', c === void 0);
+        function test1() {
+            function foo(a, b, c) {
+                console.log('foo(', [].slice.call(arguments).join(','), '): c === void 0 ?', c === void 0);
+            }
+
+            foo();
+            foo(1);
+            foo(1, 2);
+            foo(1, 2, 3);
+            console.log(undefined === void 0);
         }
 
-        foo();
-        foo(1);
-        foo(1,2);
-        foo(1,2,3);
+        // 关于 callee
+        function test2(a, b, c) {
+            console.log(arguments.callee);
+        }
 
-
-        console.log(undefined === void 0);
+        test2();
     </script>
 </head>
 <body>
