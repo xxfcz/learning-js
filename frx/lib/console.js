@@ -2,11 +2,9 @@
  * Created by Administrator on 2017/2/27.
  */
 
-
 (function () {
     if (typeof window.console !== 'undefined')
         return;
-
 
     var logs = [];
 
@@ -31,35 +29,16 @@
         window.console = collector;
     }
 
-    // 保存之前的 window.onload
-    var onload_saved = window.onload;
-
-    window.onload = function () {
+    var setup = function () {
         window.console = console;
+        // flush logs
         if (logs.length > 0) {
             for (var i = 0; i < logs.length; ++i) {
                 console.log(logs[i]);
             }
         }
+    };
 
-        if (onload_saved)
-            onload_saved();
-    }
+    var addEv = window.addEventListener || window.attachEvent;
+    addEv('onload', setup);
 })();
-
-
-/*
-(function () {
-    if (typeof window.console === 'undefined') {
-        window.console = {
-            log: function () {
-                var text = [].slice.call(arguments).join(' ');
-                var el = document.createElement('div');
-                el.innerText = text;
-                document.body.appendChild(el);
-            }
-        }
-    }
-})();
-*/
-
