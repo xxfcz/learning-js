@@ -168,6 +168,9 @@
                     // document?
                     else if (o.nodeType === 9)
                         result = 'Document';
+                    // NodeList?
+                    else if (isFinite(o.length) && o.item)
+                        result = 'NodeList';
                     break;
                 default:
                     break;
