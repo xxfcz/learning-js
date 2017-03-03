@@ -8,7 +8,7 @@
         $ = window.$ = {};
 
     $.extend = (function () {  // Assign the return value of this function
-                                 // This is the list of special-case properties we check for
+        // This is the list of special-case properties we check for
         var protoprops = ["toString", "valueOf", "constructor", "hasOwnProperty",
             "isPrototypeOf", "propertyIsEnumerable", "toLocaleString"];
 
@@ -92,7 +92,9 @@
     };
 
     $.isDate = function (o) {
-        return Object.prototype.toString.call(o) === '[object Date]' && o.toString() !== 'Invalid Date';
+        var s = o.toString();
+        return Object.prototype.toString.call(o) === '[object Date]' && s !== 'Invalid Date'
+            && s !== 'NaN'; // IE6
     };
 
 // 用 Document 指示 HTMLDocument

@@ -60,7 +60,7 @@ var Utest = (function () {
             throw new Error();
         } catch (e) {
             // loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
-            el = this.print(msg);
+            el = this.print(msg || (predicate ? '通过' : '失败'));
             el.className += predicate ? ' pass' : ' fail';
             if (!predicate && typeof e.stack !== 'undefined') {
                 var stack = document.createElement('div');
