@@ -133,6 +133,7 @@
         '[object Function]': 'Function',
         '[object Null]': 'Null',
         '[object Undefined]': 'Undefined',
+        '[object Document]': 'Document',
         '[object HTMLDocument]': 'Document',
         '[object Window]': 'Window',
         '[object Arguments]': 'Arguments',
