@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
     <title>isX() 测试</title>
     <link type="text/css" rel="stylesheet" href="./lib/utest.css">
+    <script type="text/javascript" src="lib/console.js"></script>
     <script type="text/javascript" src="lib/xlib.js"></script>
     <script type="text/javascript" src="lib/utest.js"></script>
     <script>
@@ -78,6 +79,9 @@
             ut.assert($.isRegExp(/abc/i));
             ut.assert(!$.isRegExp('abc/i'));
 
+            ut.print('typeof window:', typeof window);
+            ut.print('Object.prototype.toString.call(window):', Object.prototype.toString.call(window));
+
             ut.assert($.isWindow(window), "window 是 Window");
             ut.assert(!$.isWindow(document), 'document 不是 Window');
             ut.assert($.isDocument(document), 'document 是 Document');
@@ -99,6 +103,9 @@
             ut.assert($.type(1) == 'Number', '1 是 Number');
             ut.assert($.type({}, 'Object'), '{} 是 Object');
             ut.assert($.type([], 'Array'), '[] 是 Array');
+            ut.assert($.type(new Date()) === 'Date', 'new Date() 是 Date');
+            ut.assert(!$.type(new Date('abcdi'), 'Date'), "new Date('abcdi') 不是 Date");
+            ut.assert(!$.type('2012-5-3', 'Date'), "'2012-5-3' 不是 Date");
             ut.assert($.type(window, 'Window'), 'window 是 Window');
             ut.assert($.type(document, 'Document'), 'document 是 Document');
             ut.assert($.type(document.images, 'NodeList'), 'document.images 是 NodeList');
@@ -109,6 +116,18 @@
     </script>
 </head>
 <body>
+
+<div class="button-bar">
+    <button id="all">全部都看</button>
+    <button id="pass">只看通过</button>
+    <button id="fail">只看失败</button>
+</div>
 <div id="output" class="utest"></div>
+
+<script type="text/javascript">
+    $.on(document.getElementById('all'), 'click', function () {
+        alert('all!');
+    });
+</script>
 </body>
 </html>

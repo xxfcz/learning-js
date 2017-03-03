@@ -91,7 +91,7 @@
         var s = Object.prototype.toString.call(o);
         if (s === '[object Window]')
             return true;
-        return (o == document) && (document != o);  // IE6-8
+        return (o == document) && !(document == o);  // IE6-8
     };
 
     $.isDate = function (o) {
@@ -142,7 +142,7 @@
     };
 
     $.type = function (obj, str) {
-        var result;
+        var result, s;
         if (obj === null) {
             result = 'Null';
         }
@@ -154,8 +154,18 @@
         }
         else {
             result = class2types[Object.prototype.toString.call(obj)] || '#';
+            switch (result) {
+                case 'Date':
+                    s = obj.toString();
+                    if (s === 'Invalid Date' || s === 'NaN') {
+                        result = 'Undefined';
+                    }
+                    break;
+                default:
+                    break;
+            }
             if (result === '#') {
-
+                console.log('不能识别的：', Object.prototype.toString.call(obj));
             }
         }
 
