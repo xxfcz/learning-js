@@ -110,7 +110,7 @@
     $.isNodeList = function (o) {
         var s = Object.prototype.toString.call(o);
         return (s === '[object NodeList]') || (s === '[object HTMLCollection]') ||
-            (isFinite(o.length) && $.isFunction(o.item)); // 有length属性且为有限值，还有函数item()
+            (isFinite(o.length) && o.item);
     };
 
     $.isArrayLike = function (o) {
