@@ -161,10 +161,13 @@
                         result = 'Undefined';
                     }
                     break;
-                case 'Object':
+                case 'Object':  // IE6-8
                     // window?
-                    if((o == document) && !(document == o))
+                    if ((o == document) && !(document == o))
                         result = 'Window';
+                    // document?
+                    else if (o.nodeType === 9)
+                        result = 'Document';
                     break;
                 default:
                     break;
