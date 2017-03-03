@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>非标准HTML属性</title>
+    <script type="text/javascript" src="../frx/lib/console.js"></script>
+</head>
+<body>
+<div id="box" width="300px" my-attr="要风得风，要雨得雨">看看这里藏了些什么</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var node = document.getElementById('box');
+        console.log('标准属性id=', node.id);
+        console.log('非标准属性my-attr=', node.getAttribute('my-attr'));
+        console.log('使用getAttribute()访问标准属性id=', node.getAttribute('id'));
+    }
+</script>
+</body>
+</html>

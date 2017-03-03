@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
     <title>isX() 测试</title>
+    <link type="text/css" rel="stylesheet" href="./lib/utest.css">
+    <script type="text/javascript" src="lib/xlib.js"></script>
     <script type="text/javascript" src="lib/utest.js"></script>
-    <script type="text/javascript" src="lib/isX.js"></script>
     <script>
         window.onload = function () {
             var ut = new Utest('output');
@@ -13,6 +14,7 @@
             ut.assert(isNaN('abc'), "isNaN('abc') === true");
             ut.print('正则表达式：', /test/i.toString());
             ut.print('document.toString():', document.toString());
+            ut.print('Object.prototype.toString.call(document):', Object.prototype.toString.call(document));
             ut.print('document.images.toString():', document.images.toString());
             ut.print("document.getElementsByName('div').toString():", document.getElementsByName('div').toString());
             ut.print('Object.prototype.toString.call([]):', Object.prototype.toString.call([]));
@@ -46,19 +48,19 @@
             ut.assert(!$.isNaN('abc'), '$.isNaN("abc") === false');
             ut.assert(!$.isNaN({ x: 1, y: 2 }), '$.isNaN({x:1, y:2}) === false');
 
-            ut.assert($.isNumber(1), ' 1 是Number');
+            ut.assert($.isNumber(1), ' 1  是 Number');
             var objN = new Number(10);
-            ut.assert($.isNumber(objN), 'new Number() 是 Number');
-            ut.assert(!$.isNumber(null), 'null 不是 Number');
-            ut.assert(!$.isNumber(NaN), 'NaN 不是 Number');
-            ut.assert(!$.isNumber(undefined), 'undefined 不是 Number');
+            ut.assert($.isNumber(objN), 'new Number()  是  Number');
+            ut.assert(!$.isNumber(null), 'null 不 是  Number');
+            ut.assert(!$.isNumber(NaN), 'NaN 不 是  Number');
+            ut.assert(!$.isNumber(undefined), 'undefined 不 是  Number');
 
-            ut.assert($.isBoolean(true), 'true 是 Boolean');
-            ut.assert($.isBoolean(new Boolean()), 'new Boolean() 是 Boolean');
-            ut.assert(!$.isBoolean(1), '1 不是 Boolean');
+            ut.assert($.isBoolean(true), 'true  是  Boolean');
+            ut.assert($.isBoolean(new Boolean()), 'new Boolean()  是  Boolean');
+            ut.assert(!$.isBoolean(1), '1 不 是  Boolean');
 
-            ut.assert($.isString('abc'), "'abc'是String");
-            ut.assert(!$.isString(123), '123 不是 String');
+            ut.assert($.isString('abc'), "'abc' 是 String");
+            ut.assert(!$.isString(123), '123 不 是  String');
 
             var f1 = function () { };
             ut.assert($.isFunction(f1));
@@ -81,15 +83,30 @@
             ut.assert(!$.isDocument(window));
 
             ut.print('document.images:', Object.prototype.toString.call(document.images));
-            ut.print('document.images.item:',  Object.prototype.toString.call(document.images.item));
+            ut.print('document.images.item:', Object.prototype.toString.call(document.images.item));
             ut.assert($.isNodeList(document.images), '$.isNodeList(document.images)');
             ut.assert($.isNodeList(document.getElementsByName('div')), "$.isNodeList(document.getElementsByName('div'))");
             if (document.querySelectorAll)
                 ut.assert($.isNodeList(document.querySelectorAll('div>p')), "$.isNodeList(document.querySelectorAll('div>p'))");
+
+
+            ut.print('*************************************************************');
+            ut.assert($.type(null, 'Null'), 'type(null) 是 Null');
+            ut.assert($.type(undefined, 'Undefined'), 'undefined 是 Undefined');
+            ut.assert($.type(1, 'Number'), '1 是 Number');
+            ut.assert($.type(1) == 'Number', '1 是 Number');
+            ut.assert($.type({}, 'Object'), '{} 是 Object');
+            ut.assert($.type([], 'Array'), '[] 是 Array');
+            ut.assert($.type(window, 'Window'), 'window 是 Window');
+            ut.assert($.type(document, 'Document'), 'document 是 Document');
+            ut.assert($.type(document.images, 'NodeList'), 'document.images 是 NodeList');
+            ut.assert($.type(document.getElementsByName('div'), 'NodeList'), 'document.getElementsByName() 是 NodeList');
+            if (document.querySelectorAll)
+                ut.assert($.type(document.querySelectorAll('div'), 'NodeList'), 'document.querySelectorAll() 是 NodeList');
         };
     </script>
 </head>
 <body>
-<div id="output"></div>
+<div id="output" class="utest"></div>
 </body>
 </html>

@@ -48,27 +48,25 @@ var Utest = (function () {
     Utest.prototype.print = function () {
         var text = [].slice.call(arguments).join(' ');
         var el = document.createElement('div');
+        el.className += ' log';
         util.text(el, text);
-        el.style.border = 'solid 1px gray';
         this._div.appendChild(el);
         return el;
     };
 
     Utest.prototype.assert = function (predicate, msg) {
         var el, loc;
-        if (!predicate) {
-            try {
-                throw new Error();
-            } catch (e) {
-                // loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
-                el = this.print(msg);
-                el.style.color = 'red';
-                if (typeof e.stack !== 'undefined') {
-                    var stack = document.createElement('div');
-                    stack.style.textIndent = '2em';
-                    util.text(stack, e.stack);
-                    el.appendChild(stack);
-                }
+        try {
+            throw new Error();
+        } catch (e) {
+            // loc = e.stack.replace(/Error\n/).split(/\n/)[1].replace(/^\s+|\s+$/, "");
+            el = this.print(msg);
+            el.className += predicate ? ' pass' : ' fail';
+            if (!predicate && typeof e.stack !== 'undefined') {
+                var stack = document.createElement('div');
+                stack.style.textIndent = '2em';
+                util.text(stack, e.stack);
+                el.appendChild(stack);
             }
         }
     };
