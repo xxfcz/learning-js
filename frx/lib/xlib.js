@@ -141,31 +141,36 @@
         '[object StaticNodeList]': 'NodeList'
     };
 
-    $.type = function (obj, str) {
+    $.type = function (o, str) {
         var result, s;
-        if (obj === null) {
+        if (o === null) {
             result = 'Null';
         }
-        else if (obj !== obj) {
+        else if (o !== o) {
             result = 'NaN';
         }
-        else if (obj === void 0) {
+        else if (o === void 0) {
             result = 'Undefined'
         }
         else {
-            result = class2types[Object.prototype.toString.call(obj)] || '#';
+            result = class2types[Object.prototype.toString.call(o)] || '#';
             switch (result) {
                 case 'Date':
-                    s = obj.toString();
+                    s = o.toString();
                     if (s === 'Invalid Date' || s === 'NaN') {
                         result = 'Undefined';
                     }
+                    break;
+                case 'Object':
+                    // window?
+                    if((o == document) && !(document == o))
+                        result = 'Window';
                     break;
                 default:
                     break;
             }
             if (result === '#') {
-                console.log('不能识别的：', Object.prototype.toString.call(obj));
+                alert('不能识别的：' + Object.prototype.toString.call(o));
             }
         }
 
