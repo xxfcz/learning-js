@@ -88,7 +88,10 @@
     };
 
     $.isWindow = function (o) {
-        return Object.prototype.toString.call(o) === '[object Window]';
+        var s = Object.prototype.toString.call(o);
+        if (s === '[object Window]')
+            return true;
+        return (o == document) && (document != o);  // IE6-8
     };
 
     $.isDate = function (o) {
@@ -164,17 +167,20 @@
 
     // events -------------------------------------------------------------------
 
-    $.on = function (event, handler) {
-        if (window.addEventListener) {
-            return function (event, handler) {
-                window.addEventListener(event, handler);
+    $.on = function (node, event, handler) {
+        var f;
+        if (node.addEventListener) {
+            f = function (node, event, handler) {
+                node.addEventListener('on' + event, handler);
+            };
+        }
+        else if (node.attachEvent) {
+            f = function (node, event, handler) {
+                node.attachEvent('on' + event, handler);
             }
         }
-        else if (window.attachEvent) {
-            return function (event, handler) {
-                window.attachEvent(event, handler);
-            }
-        }
+        f(node, event, handler);
+        return f;
     };
 
 
