@@ -57,20 +57,18 @@ function getCurrentScript(base) {
             return node.className = node.src;
         }
     }
+
+    console.log('在 document.scripts 中寻找');
+    return $.slice(document.scripts).pop().src;
 }
 
 (function () {
     var cur = src = getCurrentScript(true);
     console.log('getCurrentScript: ' + cur);
-    if (!cur) {//处理window safari的Error没有stack的问题
-        cur = $.slice(document.scripts).pop().src;
-        console.log('Error no stack: ' + cur);
-    }
 
     var basepath;
     // 若无完整路径，则补充之
     if (cur.substring(0, 4) !== 'http') {
-        console.log('location.href:', location.href);
         basepath = location.href.slice(0, location.href.lastIndexOf('/') + 1);
         cur = basepath + cur;
     }
