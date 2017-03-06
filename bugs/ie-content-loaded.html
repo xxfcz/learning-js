@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>IE下模拟 ContentLoaded 事件</title>
+    <script type="text/javascript" src="../vendor/ie-content-loaded.js"></script>
+    <script type="text/javascript">
+
+        var textOut = (function () {
+            var elMsg = document.getElementById('msg');
+            return function _textOut(s) {
+                elMsg.appendChild(document.createTextNode(s));
+            };
+        })();
+
+
+        var W3C = window.dispatchEvent, isIE = !W3C;
+
+        function userInit() {
+            var elMsg = document.getElementById('msg');
+            elMsg.appendChild(document.createTextNode('执行用户初始化代码。'));
+        }
+
+
+        if (W3C) {
+            document.addEventListener('DOMContentLoaded', function () {
+                var elMsg = document.getElementById('msg');
+                elMsg.appendChild(document.createTextNode('通过标准的DOMContentLoaded事件：'));
+                userInit();
+            })
+        }
+        else {
+            IEContentLoaded(window, function () {
+                var elMsg = document.getElementById('msg');
+                elMsg.appendChild(document.createTextNode('IE则通过 doScroll()方法和 onreadystatechange 事件：'));
+                userInit();
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="times"></div>
+<hr>
+<div id="msg"></div>
+</body>
+</html>
