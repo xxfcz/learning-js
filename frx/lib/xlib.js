@@ -79,10 +79,6 @@
         return Object.prototype.toString.call(o) === '[object Function]';
     };
 
-    $.isArray = function (o) {
-        return Object.prototype.toString.call(o) === '[object Array]';
-    };
-
     $.isRegExp = function (o) {
         return Object.prototype.toString.call(o) === '[object RegExp]';
     };
@@ -119,7 +115,17 @@
     };
 
     $.isArrayLike = function (o) {
+        var type = $.type(o);
+        if (/Array|NodeList|Arguments|CSSRuleList/.test(type))
+            return true;
 
+        if (type === 'Object') {
+            var n = o.length;
+            if (+n === n && !(n % 1) && n >= 0)
+                return true;
+        }
+
+        return false;
     };
 
     var class2types = {
@@ -172,12 +178,11 @@
                     // NodeList?
                     else if (isFinite(o.length) && o.item)
                         result = 'NodeList';
+                    else if (o.callee)
+                        result = 'Arguments';
                     break;
                 default:
                     break;
-            }
-            if (result === '#') {
-                alert('不能识别的：' + Object.prototype.toString.call(o));
             }
         }
 

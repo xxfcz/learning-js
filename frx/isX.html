@@ -85,6 +85,7 @@
             ut.assert($.isWindow(window), "window 是 Window");
             ut.assert(!$.isWindow(document), 'document 不是 Window');
             ut.assert($.isDocument(document), 'document 是 Document');
+            ut.assert($.isFunction(function () {}), 'function () {} 是函数');
 
             ut.print('document.images:', Object.prototype.toString.call(document.images));
             ut.print('document.images.item:', Object.prototype.toString.call(document.images.item));
@@ -92,6 +93,11 @@
             ut.assert($.isNodeList(document.getElementsByName('div')), "$.isNodeList(document.getElementsByName('div'))");
             if (document.querySelectorAll)
                 ut.assert($.isNodeList(document.querySelectorAll('div>p')), "$.isNodeList(document.querySelectorAll('div>p'))");
+
+            ut.assert($.isArrayLike([]), '[] 是 类数组');
+            ut.assert($.isArrayLike(arguments), 'arguments 是 类数组');
+            ut.assert($.isArrayLike(document.images), 'document.images 是 类数组');
+            ut.assert($.isArrayLike(document.getElementsByName('div')), 'getElementsByName() 是 类数组');
 
 
             ut.print('*************************************************************');
@@ -106,12 +112,16 @@
             ut.assert($.type(new Date()) === 'Date', 'new Date() 是 Date');
             ut.assert(!$.type(new Date('abcdi'), 'Date'), "new Date('abcdi') 不是 Date");
             ut.assert(!$.type('2012-5-3', 'Date'), "'2012-5-3' 不是 Date");
+            ut.assert($.type(function () {}, 'Function'), 'function () {} 是函数');
             ut.assert($.type(window, 'Window'), 'window 是 Window');
             ut.assert($.type(document, 'Document'), 'document 是 Document');
             ut.assert($.type(document.images, 'NodeList'), 'document.images 是 NodeList');
             ut.assert($.type(document.getElementsByName('div'), 'NodeList'), 'document.getElementsByName() 是 NodeList');
             if (document.querySelectorAll)
                 ut.assert($.type(document.querySelectorAll('div'), 'NodeList'), 'document.querySelectorAll() 是 NodeList');
+            (function () {
+                ut.assert($.type(arguments, 'Arguments'), 'arguments 是 Arguments');
+            })();
         };
     </script>
 </head>
