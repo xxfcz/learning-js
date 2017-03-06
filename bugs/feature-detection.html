@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>功能探测</title>
+    <script type="text/javascript" src="../frx/lib/console.js"></script>
+    <script type="text/javascript" src="../frx/lib/xlib.js"></script>
+    <style type="text/css">
+        .support{
+            color: white;
+            background-color: green;
+        }
+
+        .no-support{
+            color: white;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="add-event">方法：addEventListener()</div>
+<div id="content-loaded">事件：DOMContentLoaded</div>
+<div id="ready-state">事件：onreadystatechange</div>
+<div id="node-type">属性：nodeType</div>
+<div id="text-node"></div>
+<script type="text/javascript">
+
+    var support = 'support', no_support = 'no-support';
+
+    if (document.addEventListener) {
+        document.getElementById('add-event').className = support;
+    }
+    else {
+        document.addEventListener = document.attachEvent;
+        document.getElementById('add-event').className = no_support;
+    }
+
+    document.getElementById('content-loaded').className = no_support;
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('content-loaded').className = support;
+    });
+
+    var elReadyState = document.getElementById('ready-state');
+    elReadyState.className = no_support;
+    document.onreadystatechange = function () {
+        elReadyState.className = support;
+        console.log('dom ready!');
+    };
+
+    var elNodeType = document.getElementById('node-type');
+    elNodeType.className = typeof elNodeType.nodeType === 'undefined' ? no_support : support;
+
+    var elTextNode = document.getElementById('text-node');
+    elTextNode.appendChild(document.createTextNode('这是个文本节点'));
+</script>
+
+</body>
+</html>
