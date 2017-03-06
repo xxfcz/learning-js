@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>DOM ready</title>
+    <script type="text/javascript" src="lib/xlib.js"></script>
+    <script type="text/javascript">
+
+        function textOut(s) {
+            var node = document.getElementById('msg');
+            var el = document.createElement('li');
+            el.appendChild(document.createTextNode(s));
+            node.appendChild(el);
+        }
+
+
+
+        $.ready(function () {
+            textOut('DOM就绪，初始化 #1');
+        });
+        $.ready(function () {
+            textOut('DOM就绪，初始化 #2');
+        });
+        $.ready(function () {
+            textOut('DOM就绪，初始化 #3');
+        });
+
+    </script>
+</head>
+<body>
+<ul id="msg"></ul>
+</body>
+</html>
