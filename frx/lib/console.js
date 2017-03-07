@@ -39,6 +39,7 @@
         }
     };
 
-    var addEv = window.addEventListener || window.attachEvent;
-    addEv('onload', setup);
+    //var addEv = window.addEventListenerwindow.addEventListener || window.attachEvent;
+    //addEv('onload', setup);
+    window[window.addEventListener?'addEventListener':'attachEvent']('onload', setup);
 })();
