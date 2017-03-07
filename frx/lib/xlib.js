@@ -288,11 +288,15 @@
 
 
     // 加载器 ------------------------------------------------------------------
+
+    var STATE_LOADING = 1, STATE_LOADED = 2;
+    var modules = {};   // 模块列表
+
     function loadJS(url, cb) {
         var node = document.createElement('script');
-        // IE8 及更早版本不支持<script>元素上的 load 事件
+        // IE8 及更早版本不支持<script>元素上的 load 事件，而是提供了onreadystatechange
         node[W3C ? 'onload' : 'onreadystatechange'] = function () {
-            console.log('readyState:', node.readyState);
+            // console.log('readyState:', node.readyState);
             // IE9- 有 loading 和 loaded 两次触发
             // IE10  有 complete 一次触发
             // IE11+ 及其它浏览器 无 readyState 属性
@@ -313,5 +317,53 @@
     }
 
     $._loadJS = loadJS;
+
+    $.require = function (list, factory, parent) {
+        var deps = {};
+        var i;
+        var dn = list.length; // 需安装的依赖项个数
+        var cn = 0; // 已安装的依赖项个数
+        var id = 'callback' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
+
+        //记录本模块的加载情况与其他信息
+        modules[id] = {
+            id: id,
+            //factory: factory,
+            deps: deps,
+            //args: args,
+            state: STATE_LOADING
+        };
+
+        // 对每一个依赖项
+        for (i = 0; i < list.length; ++i) {
+            var src = list[i];
+            // TODO: 路径补全；别名转换
+            // 该依赖项还从未加载过吗？
+            if (!modules[src]) {
+                modules[src] = {
+                    id: src
+                };
+
+                var cb = (function (dep, count) {
+                    // 使用闭包捕获当前依赖项dep及依赖项总数count
+                    return function () {
+                        ++cn;
+                        dep.state = STATE_LOADED;
+                        console.log('设置状态为已加载：', dep.id);
+
+                        if (cn === count) {
+                            console.log('依赖项全部加载完毕！');
+                            if (factory) {
+                                factory();
+                            }
+                        }
+                    };
+                })(modules[src], dn);
+
+                loadJS(src, cb);
+            }
+        }
+
+    };
 
 })(window, window.document);
