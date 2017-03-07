@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
     <title>依赖</title>
+    <script src="../lib/console.js"></script>
     <script src="../lib/xlib.js"></script>
     <script>
-        $.require(['/LearningJS/frx/examples/mod1.js', '/LearningJS/frx/examples/mod2.js'], function (ret) {
-            console.log('$.require() 的回调函数被执行了！');
-            console.log('哈哈！我在HTML页面中，要做爱做的事情了！');
-        });
+        $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
+                'http://localhost:63342/LearningJS/frx/examples/mod2.js'],
+            function (ret) {
+                console.log('$.require() 的回调函数被执行了！');
+                console.log('哈哈！我在HTML页面中，要做爱做的事情了！');
+                console.log('依赖项的返回值：', ret);
+            });
     </script>
 </head>
 <body>

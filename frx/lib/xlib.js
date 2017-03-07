@@ -5,6 +5,13 @@
 (function (global, DOC) {
     var W3C = typeof window.dispatchEvent !== 'undefined';
     var head = document.head || document.getElementsByTagName('head')[0];
+    var basepath;
+
+    (function () {
+        var cur = getCurrentScript(true);
+        var url = cur.replace(/[?#].*/, "");
+        basepath = url.slice(0, url.lastIndexOf("/") + 1);
+    })();
 
     var $ = window.$;
     if (typeof $ === 'undefined')
@@ -323,21 +330,18 @@
         var i;
         var dn = list.length; // 需安装的依赖项个数
         var cn = 0; // 已安装的依赖项个数
-        var id = 'callback' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
-
-        //记录本模块的加载情况与其他信息
-        modules[id] = {
-            id: id,
-            //factory: factory,
-            deps: deps,
-            //args: args,
-            state: STATE_LOADING
-        };
+        // parent = parent || basepath;
+        var id = parent || 'callback' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
 
         // 对每一个依赖项
         for (i = 0; i < list.length; ++i) {
             var src = list[i];
             // TODO: 路径补全；别名转换
+
+            if (!deps[src]) {
+                deps[src] = '肖雪峰';
+            }
+
             // 该依赖项还从未加载过吗？
             if (!modules[src]) {
                 modules[src] = {
@@ -348,22 +352,131 @@
                     // 使用闭包捕获当前依赖项dep及依赖项总数count
                     return function () {
                         ++cn;
-                        dep.state = STATE_LOADED;
-                        console.log('设置状态为已加载：', dep.id);
-
+                        var mod = modules[dep];
+                        mod.state = STATE_LOADED;
                         if (cn === count) {
-                            console.log('依赖项全部加载完毕！');
-                            if (factory) {
-                                factory();
-                            }
+                            console.log(id + ' 依赖项全部加载完毕！  原位置');
+                            fireFactory(id, factory);
                         }
                     };
-                })(modules[src], dn);
+                })(src, dn);
 
                 loadJS(src, cb);
+
+                if (modules[src] && modules[src].state === STATE_LOADED) {
+                    ++cn;
+                }
             }
         }
 
+        //记录本模块的加载情况与其他信息
+        modules[id] = {
+            id: id,
+            //factory: factory,
+            deps: deps,
+            //args: args,
+            state: STATE_LOADING
+        };
+
+
+        if (cn === dn) {
+            console.log(id + ' 完全安装了依赖项，共计 ' + cn);
+            fireFactory(id, factory);
+        }
     };
+
+    function getCurrentScript(base) {
+        // 参考 https://github.com/samyk/jiagra/blob/master/jiagra.js
+        var stack;
+        try {
+            a.b.c(); //强制报错,以便捕获e.stack
+        } catch (e) { //safari的错误对象只有line,sourceId,sourceURL
+            stack = e.stack;
+            if (!stack && window.opera) {
+                //opera 9没有e.stack,但有e.Backtrace,但不能直接取得,需要对e对象转字符串进行抽取
+                stack = (String(e).match(/of linked script \S+/g) || []).join(" ");
+            }
+        }
+        if (stack) {
+            stack = stack.split(/[@ ]/g).pop(); //取得最后一行,最后一个空格或@之后的部分
+            stack = stack[0] === "(" ? stack.slice(1, -1) : stack.replace(/\s/, ""); //去掉换行符
+            return stack.replace(/(:\d+)?:\d+$/i, ""); //去掉行号与或许存在的出错字符起始位置
+        }
+        else {
+            console.log('NO Stack!');
+        }
+        var nodes = (base ? document : head).getElementsByTagName("script"); //只在head标签中寻找
+        for (var i = nodes.length, node; node = nodes[--i];) {
+            if ((base || node.className === moduleClass) && node.readyState === "interactive") {
+                return node.className = node.src;
+            }
+        }
+
+        console.log('在 document.scripts 中寻找');
+        return $.slice(document.scripts).pop().src;
+    }
+
+    var rdeuce = /\/\w+\/\.\./;
+
+    function makeFullPath(url, parent) {
+        if (/^(\w+)(\d)?:.*/.test(url)) { //如果本来就是完整路径
+            ret = url;
+        } else {
+            //parent = parent ? parent.substr(0, parent.lastIndexOf('/')) : basepath;
+            parent = parent.substr(0, parent.lastIndexOf('/')); // TODO: IE6 需要补丁 lastIndexOf()
+            var tmp = url.charAt(0);
+            if (tmp !== "." && tmp !== "/") { //相对于根路径
+                ret = basepath + url;
+            } else if (url.slice(0, 2) === "./") { //相对于兄弟路径
+                ret = parent + url.slice(1);
+            } else if (url.slice(0, 2) === "..") { //相对于父路径
+                ret = parent + "/" + url;
+                while (rdeuce.test(ret)) {
+                    ret = ret.replace(rdeuce, "")
+                }
+            } else if (tmp === "/") {
+                ret = parent + url;//相对于兄弟路径
+            } else {
+                console.error("不符合模块标识规则: " + url);
+            }
+        }
+        ret = ret.replace(/[?#].*/, ""); // 清除尾上的 ? # 等串
+        return ret;
+    }
+
+    $._makeFullPath = makeFullPath;
+
+    /**
+     * @summary 安装模块#id
+     * @description 请求模块从modules对象取得依赖列表中的各模块的返回值，执行factory, 完成模块的安装
+     * @param {String} id  模块ID
+     * @param {Function} factory 模块工厂
+     * @api private
+     */
+    function fireFactory(id, factory) {
+        var mod = modules[id];
+        var deps = mod.deps;
+        var args = [];
+        // 取各依赖项的导出值
+        console.log(id + '依赖项：', deps);
+        for (var key in deps) {
+            if (deps.hasOwnProperty(key)) {
+                args.push(modules[key].exports);
+            }
+        }
+        var ret = factory.apply(global, args);
+        if (ret !== void 0) {
+            mod.exports = ret;  // 本模块导出值
+            console.log(id + '模块导出值：', ret);
+        }
+        mod.state = STATE_LOADED;
+        return ret;
+    }
+
+    $.define = function (deps, factory) {
+        // define 本质上就是 require
+        var id = getCurrentScript();
+        $.require(deps, factory, id);
+    }
 
 })(window, window.document);
