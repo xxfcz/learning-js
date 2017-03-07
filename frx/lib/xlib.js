@@ -2,8 +2,9 @@
  * Created by Administrator on 2017/3/2.
  */
 
-(function () {
+(function (global, DOC) {
     var W3C = typeof window.dispatchEvent !== 'undefined';
+    var head = document.head || document.getElementsByTagName('head')[0];
 
     var $ = window.$;
     if (typeof $ === 'undefined')
@@ -45,6 +46,7 @@
             return o;
         };
     }());
+
 
     // types ------------------------------------------------------------------------------------------
 
@@ -283,4 +285,24 @@
     else {
         IEContentLoaded(window, fireReady);
     }
-})();
+
+
+    // 加载器 ------------------------------------------------------------------
+    function loadJS(url, cb) {
+        var node = document.createElement('script');
+        node[W3C ? 'onload' : 'onreadystatechange'] = function () {
+            console.log('已成功加载：', url);
+            if (cb)
+                cb();
+        };
+        node.onerror = function () {
+            console.log('加载时出错：', url);
+        };
+        node.src = url;
+        head.appendChild(node);
+        console.log('正准备加载：', url);
+    }
+
+    $._loadJS = loadJS;
+
+})(window, window.document);
