@@ -4,15 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
     <title>工具函数的测试</title>
+    <link rel="stylesheet" type="text/css" href="../lib/utest.css">
     <script src="../lib/console.js"></script>
+    <script src="../lib/utest.js"></script>
     <script src="../lib/xlib.js"></script>
-    <script>
-        $._loadJS('/LearningJS/frx/examples/mod1.js');
-        var p1 = $._makeFullPath('/LearningJS/frx/examples/mod1.js#pdfa?t=323&x=3');
-        console.log('完整路径：', p1);
-    </script>
 </head>
 <body>
+<div class="utest" id="test"></div>
 
+<script>
+    $.ready(function () {
+        $._loadJS('/LearningJS/frx/examples/mod1.js');
+        var p1 = $._makeFullPath('/LearningJS/frx/examples/mod1.js#pdfa?t=323&x=3', 'http://localhost/');
+        console.log('完整路径：', p1);
+
+        var test = new Utest('test');
+/*        test.assert($._lastIndexOf('abc', 'a') === 0, 'abc,a: 0');
+        test.assert($._lastIndexOf('abc', 'bc') === 1, 'abc,bc: 1');
+        test.assert($._lastIndexOf('abc', 'd') === -1, 'abc,d: -1');
+        test.assert($._lastIndexOf('abc', '') === 3, 'abc,"": 3');
+        test.assert($._lastIndexOf('abc', null) === -1, 'abc,null: -1');
+ */       test.assert('abc'.lastIndexOf('a') === 0, 'abc,a: 0');
+    });
+</script>
 </body>
 </html>

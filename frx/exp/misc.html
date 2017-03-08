@@ -24,14 +24,39 @@
         }
 
         function test3() {
+            var Path = (function () {
 
-            console.log();
+                var Path = {};
+                Path.getFile = function (path) {
+                    var i = path.lastIndexOf('/');
+                    if (i === -1)
+                        return path;
+                    return path;
+                };
+
+                return Path;
+            })();
+
+            var url = 'http://localhost:63342/LearningJS/frx/examples/mod1.js';
+            var s = url.replace(/^.*\/\/.*?\//g, '/');
+            console.log('结果是', s);
         }
 
 
-        var  url = 'http://localhost:63342/LearningJS/frx/examples/mod1.js';
-        var s = url.replace(/^.*\/\/.*?\//g, '/');
-        console.log('结果是', s);
+        function test4() {
+            var iNum = 0;
+            outermost:
+                for (var i = 0; i < 10; i++) {
+                    for (var j = 0; j < 10; j++) {
+                        if (i == 5 && j == 5) {
+                            //continue outermost;
+                        }
+                        iNum++;
+                    }
+                }
+
+            console.log(iNum);
+        }
 
     </script>
 </head>

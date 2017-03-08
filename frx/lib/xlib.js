@@ -7,6 +7,7 @@
     var head = document.head || document.getElementsByTagName('head')[0];
     var moduleClass = "xlib" + (new Date - 0);
     var basepath;
+    var loadings = [];  // 正在加载的模块
 
     (function () {
         var cur = getCurrentScript(true);
@@ -18,7 +19,9 @@
     if (typeof $ === 'undefined')
         $ = window.$ = {};
 
-    $.extend = (function () {  // Assign the return value of this function
+
+    $.extend = (function () {
+        // Assign the return value of this function
         // This is the list of special-case properties we check for
         var protoprops = ["toString", "valueOf", "constructor", "hasOwnProperty",
             "isPrototypeOf", "propertyIsEnumerable", "toLocaleString"];
@@ -64,8 +67,10 @@
      * @api public
      */
     $.slice = W3C ? function (nodes, start, end) {
-        return factorys.slice.call(nodes, start, end);
-    } : function (nodes, start, end) {
+        return [].slice.call(nodes, start, end);
+    } : _slice;
+
+    function _slice(nodes, start, end) {
         var ret = [],
             n = nodes.length;
         if (end === void 0 || typeof end === "number" && isFinite(end)) {
@@ -85,9 +90,9 @@
             }
         }
         return ret;
-    };
+    }
 
-    // types ------------------------------------------------------------------------------------------
+    // <editor-fold desc="Type checking">
 
     $.isNull = function (o) {
         return o === null;
@@ -235,6 +240,9 @@
         return result;
     };
 
+//</editor-fold>
+
+    //<editor-fold desc="misc">
 
     // events -------------------------------------------------------------------
 
@@ -270,8 +278,10 @@
         return this;
     };
 
+    //</editor-fold>
 
-    // 初始化 --------------------------------------------------------------------
+    //<editor-fold desc="DOM ready">
+
     var readyList = [];
 
     $.ready = function (fn) {
@@ -326,8 +336,9 @@
         IEContentLoaded(window, fireReady);
     }
 
+    //</editor-fold>
 
-    // 加载器 ------------------------------------------------------------------
+    //<editor-fold desc="Module loader">
 
     var STATE_LOADING = 1, STATE_LOADED = 2;
     var modules = {};   // 模块列表
@@ -360,7 +371,7 @@
 
     function loadExternal(url) {
         // TODO: 路径补全；别名转换
-        var src = url;
+        var src = url.replace(/[?#].*/, ""); // 清除尾上的 ? # 等串
 
         // 该依赖项还从未加载过吗？
         if (!modules[src]) {
@@ -402,9 +413,8 @@
         //记录本模块的加载情况与其他信息
         modules[id] = {
             id: id,
-            //factory: factory,
+            factory: factory,
             deps: deps,
-            //args: args,
             state: STATE_LOADING
         };
 
@@ -418,7 +428,10 @@
         }
         else {
             console.log(id + ' 有依赖项尚未安装，计 ' + (dn - cn) + '/' + dn);
+            // 放入检测队列，待 checkDeps() 处理
+            loadings.unshift(id);
         }
+        checkDeps(id + ' 发起依赖检测');
     };
 
     function getCurrentScript(base) {
@@ -455,11 +468,12 @@
     var rdeuce = /\/\w+\/\.\./;
 
     function makeFullPath(url, parent) {
+        var ret;
         if (/^(\w+)(\d)?:.*/.test(url)) { //如果本来就是完整路径
             ret = url;
         } else {
             //parent = parent ? parent.substr(0, parent.lastIndexOf('/')) : basepath;
-            parent = parent.substr(0, parent.lastIndexOf('/')); // TODO: IE6 需要补丁 lastIndexOf()
+            parent = parent.substr(0, parent.lastIndexOf('/'));
             var tmp = url.charAt(0);
             if (tmp !== "." && tmp !== "/") { //相对于根路径
                 ret = basepath + url;
@@ -476,7 +490,6 @@
                 console.error("不符合模块标识规则: " + url);
             }
         }
-        ret = ret.replace(/[?#].*/, ""); // 清除尾上的 ? # 等串
         return ret;
     }
 
@@ -513,6 +526,30 @@
         var id = getCurrentScript();
         console.log('【定义模块】：', id);
         $.require(deps, factory, id);
+    };
+
+    function checkDeps(msg) {
+        for (var i = loadings.length, id; id = loadings[--i]; i >= 0) {
+            //检测此JS模块的依赖是否都已安装完毕,是则安装自身
+            var obj = modules[id],
+                deps = obj.deps,
+                allLoaded = true;
+            for (var key in deps) {
+                if (Object.prototype.hasOwnProperty.call(deps, key) && modules[key].state !== STATE_LOADED) {
+                    allLoaded = false;
+                    break;
+                }
+            }
+
+            if (allLoaded && obj.state !== STATE_LOADED) {
+                console.log('模块加载成功：', obj.id);
+                loadings.splice(i, 1); //必须先移除再安装，防止在IE下DOM树建完后手动刷新页面，会多次执行它
+                fireFactory(obj.id, obj.factory);
+                checkDeps(obj.id + ' 已安装成功,但再执行一次');//如果成功,则再执行一次,以防有些模块就差本模块没有安装好
+            }
+        }
     }
+
+    //</editor-fold>
 
 })(window, window.document);
