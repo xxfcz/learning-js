@@ -7,13 +7,25 @@
     <script src="../lib/console.js"></script>
     <script src="../lib/xlib.js"></script>
     <script>
-        $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
-                'http://localhost:63342/LearningJS/frx/examples/mod2.js'],
-            function (ret) {
-                console.log('$.require() 的回调函数被执行了！');
-                console.log('哈哈！我在HTML页面中，要做爱做的事情了！');
-                console.log('依赖项的返回值：', ret);
-            });
+        function test1() {
+            $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
+                    'http://localhost:63342/LearningJS/frx/examples/mod2.js'],
+                function (ret1, ret2) {
+                    console.log('$.require() 的回调函数被执行了！');
+                    console.log('哈哈！我在HTML页面中，要做爱做的事情了！');
+                    console.log('依赖项的返回值：ret1=', ret1, ' ret2=', ret2);
+                });
+        }
+
+        function test2() {
+            $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
+                    'http://localhost:63342/LearningJS/frx/examples/mod3.js'],
+                function (mod1, mod3) {
+                    console.log('依赖项的返回值：mod1=', mod1, ', mod3=', mod3);
+                });
+        }
+
+        test1();
     </script>
 </head>
 <body>
