@@ -250,7 +250,7 @@
         var f;
         if (node.addEventListener) {
             f = function (node, event, handler) {
-                node.addEventListener('on' + event, handler);
+                node.addEventListener(event, handler);
             };
         }
         else if (node.attachEvent) {
@@ -363,6 +363,7 @@
             console.log('加载时出错：', url);
         };
         node.src = url;
+        node.className = moduleClass;
         head.appendChild(node);
         console.log('正准备加载：', url);
     }
@@ -380,8 +381,9 @@
                 exports: {}
             };
             loadJS(src);
-            return src;
         }
+
+        return src;
     }
 
     $.require = function (list, factory, parent) {
@@ -390,7 +392,9 @@
         var dn = 0; // 需安装的依赖项个数
         var cn = 0; // 已安装的依赖项个数
         // parent = parent || basepath;
-        var id = parent || getCurrentScript() + '.cb' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
+        // 起个没什么意义的名字，但不能重复
+        var loc = String(document.location).replace(/[?#].*/, "");
+        var id = parent || loc + '_cb' + setTimeout(function () { });
         //var name = id.
 
         // 对每一个依赖项
@@ -451,19 +455,20 @@
             stack = stack[0] === "(" ? stack.slice(1, -1) : stack.replace(/\s/, ""); //去掉换行符
             return stack.replace(/(:\d+)?:\d+$/i, ""); //去掉行号与或许存在的出错字符起始位置
         }
-        else {
-            console.log('NO Stack!');
-        }
+        // else {
+        //     console.log('NO Stack!');
+        // }
         var nodes = (base ? document : head).getElementsByTagName("script"); //只在head标签中寻找
         for (var i = nodes.length, node; node = nodes[--i];) {
             if ((base || node.className === moduleClass) && node.readyState === "interactive") {
-                return node.className = node.src;
+                return node.className = node.src;  // 替换掉class，防止以后被误伤
             }
         }
 
-        console.log('在 document.scripts 中寻找');
         return $.slice(document.scripts).pop().src;
     }
+
+    $._getCurrentScript = getCurrentScript;
 
     var rdeuce = /\/\w+\/\.\./;
 
@@ -521,10 +526,10 @@
         return ret;
     }
 
-    $.define = function (deps, factory) {
+    $.define = function (name, deps, factory) {
         // define 本质上就是 require
         var id = getCurrentScript();
-        console.log('【定义模块】：', id);
+        console.log('【定义模块】：name=' + name + ', file=' + id);
         $.require(deps, factory, id);
     };
 

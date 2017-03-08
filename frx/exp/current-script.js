@@ -8,7 +8,7 @@ var head = DOC.head || DOC.getElementsByTagName("head")[0]; //HEAD元素
 var moduleClass = "xlib" + (new Date - 0);
 
 var slice = W3C ? function (nodes, start, end) {
-    return factorys.slice.call(nodes, start, end);
+    return [].slice.call(nodes, start, end);
 } : function (nodes, start, end) {
     var ret = [],
         n = nodes.length;
@@ -29,6 +29,10 @@ var slice = W3C ? function (nodes, start, end) {
         }
     }
     return ret;
+};
+
+var $ = {
+    slice: slice
 };
 
 function getCurrentScript(base) {
@@ -58,8 +62,9 @@ function getCurrentScript(base) {
         }
     }
 
-    console.log('在 document.scripts 中寻找');
-    return $.slice(document.scripts).pop().src;
+    var ret = $.slice(document.scripts).pop().src;
+    console.log('在 document.scripts 中找到：' + ret);
+    return ret;
 }
 
 (function () {

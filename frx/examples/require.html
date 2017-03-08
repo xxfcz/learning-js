@@ -44,13 +44,18 @@
                 });
         }
 
-        //test0();
-        //test1();
-        //test2();
-        test3();
+        $.ready(function () {
+            $.on(document.getElementById('test0'), 'click', test0);
+            $.on(document.getElementById('test1'), 'click', test1);
+            $.on(document.getElementById('test2'), 'click', test2);
+            $.on(document.getElementById('test3'), 'click', test3);
+        })
     </script>
 </head>
 <body>
-
+<button id="test0">Test 0</button>
+<button id="test1">Test 1</button>
+<button id="test2">Test 2</button>
+<button id="test3">Test 3</button>
 </body>
 </html>
