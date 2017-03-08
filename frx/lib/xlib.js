@@ -368,22 +368,6 @@
                 id: src,
                 exports: {}
             };
-
-            /*
-                        var cb = (function (dep, count) {
-                            // 使用闭包捕获当前依赖项dep及依赖项总数count
-                            return function () {
-                                ++cn;
-                                var mod = modules[dep];
-                                mod.state = STATE_LOADED;
-                                if (cn === count) {
-                                    console.log(id + ' 直接依赖项全部加载完毕！  闭包位置');
-                                    fireFactory(id, factory);
-                                }
-                            };
-                        })(src, dn);
-            */
-
             loadJS(src);
             return src;
         }
@@ -392,7 +376,7 @@
     $.require = function (list, factory, parent) {
         var deps = {};
         var i;
-        var dn = list.length; // 需安装的依赖项个数
+        var dn = 0; // 需安装的依赖项个数
         var cn = 0; // 已安装的依赖项个数
         // parent = parent || basepath;
         var id = parent || getCurrentScript() + '.cb' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
@@ -404,6 +388,7 @@
             if (url) {
                 ++dn;
                 if (modules[url] && modules[url].state === STATE_LOADED) {
+                    console.log('真快！已加载：', url);
                     ++cn;
                 }
             }
@@ -526,6 +511,7 @@
     $.define = function (deps, factory) {
         // define 本质上就是 require
         var id = getCurrentScript();
+        console.log('【定义模块】：', id);
         $.require(deps, factory, id);
     }
 

@@ -8,6 +8,7 @@
     <script src="../lib/xlib.js"></script>
     <script>
         function test0() {
+            console.info('------------- test0 ------------------');
             $.require([], function () {
                 console.log('$.require() 的回调函数被执行了！');
                 console.log('没有依赖项');
@@ -15,6 +16,7 @@
         }
 
         function test1() {
+            console.info('------------- test1 ------------------');
             $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
                     'http://localhost:63342/LearningJS/frx/examples/mod2.js'],
                 function (ret1, ret2) {
@@ -25,6 +27,7 @@
         }
 
         function test2() {
+            console.info('------------- test2 ------------------');
             $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
                     'http://localhost:63342/LearningJS/frx/examples/mod3.js'],
                 function (mod1, mod3) {
@@ -32,7 +35,9 @@
                 });
         }
 
-        test0();
+        //test0();
+        test1();
+        //test2();
     </script>
 </head>
 <body>
