@@ -10,7 +10,16 @@
 
     var collector = {
         log: function () {
-            logs.push([].slice.call(arguments).join(' '));
+            logs.push({
+                type: 'log',
+                text: [].slice.call(arguments).join(' ')
+            });
+        },
+        info: function () {
+            logs.push({
+                type: 'info',
+                text: [].slice.call(arguments).join(' ')
+            });
         }
     };
 
@@ -19,7 +28,19 @@
             var text = [].slice.call(arguments).join(' ');
             var el = document.createElement('div');
             el.innerText = text;
+            el.className = 'console log';
             document.body.appendChild(el);
+            return el;
+        },
+
+        info: function () {
+            var text = [].slice.call(arguments).join(' ');
+            var el = document.createElement('div');
+            el.innerText = text;
+            el.className = 'console info';
+            el.style.color = 'blue';
+            document.body.appendChild(el);
+            return el;
         }
     };
 
@@ -34,12 +55,22 @@
         // flush logs
         if (logs.length > 0) {
             for (var i = 0; i < logs.length; ++i) {
-                console.log(logs[i]);
+                var log = logs[i];
+                switch(log.type) {
+                    case 'log':
+                        console.log(log.text);
+                        break;
+                    case 'info':
+                        console.info(log.text);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     };
 
     //var addEv = window.addEventListenerwindow.addEventListener || window.attachEvent;
     //addEv('onload', setup);
-    window[window.addEventListener?'addEventListener':'attachEvent']('onload', setup);
+    window[window.addEventListener ? 'addEventListener' : 'attachEvent']('onload', setup);
 })();

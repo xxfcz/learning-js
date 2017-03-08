@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
     <title>IE6的console</title>
+    <link rel="stylesheet" type="text/css" href="../lib/console.css">
     <script type="text/javascript">
         var hasNativeConsole = typeof window.console !== 'undefined';
     </script>
@@ -14,6 +15,7 @@
 </head>
 <body>
 <script>
+    console.info('这一行是用 info() 输出的。');
     console.log('你觉得怎么样？');
 
     if(hasNativeConsole)
