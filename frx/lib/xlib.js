@@ -358,6 +358,37 @@
 
     $._loadJS = loadJS;
 
+    function loadExternal(url) {
+        // TODO: 路径补全；别名转换
+        var src = url;
+
+        // 该依赖项还从未加载过吗？
+        if (!modules[src]) {
+            modules[src] = {
+                id: src,
+                exports: {}
+            };
+
+            /*
+                        var cb = (function (dep, count) {
+                            // 使用闭包捕获当前依赖项dep及依赖项总数count
+                            return function () {
+                                ++cn;
+                                var mod = modules[dep];
+                                mod.state = STATE_LOADED;
+                                if (cn === count) {
+                                    console.log(id + ' 直接依赖项全部加载完毕！  闭包位置');
+                                    fireFactory(id, factory);
+                                }
+                            };
+                        })(src, dn);
+            */
+
+            loadJS(src);
+            return src;
+        }
+    }
+
     $.require = function (list, factory, parent) {
         var deps = {};
         var i;
@@ -369,38 +400,18 @@
 
         // 对每一个依赖项
         for (i = 0; i < list.length; ++i) {
-            var src = list[i];
-            // TODO: 路径补全；别名转换
-
-            if (!deps[src]) {
-                deps[src] = '肖雪峰';
-            }
-
-            // 该依赖项还从未加载过吗？
-            if (!modules[src]) {
-                modules[src] = {
-                    id: src
-                };
-
-                var cb = (function (dep, count) {
-                    // 使用闭包捕获当前依赖项dep及依赖项总数count
-                    return function () {
-                        ++cn;
-                        var mod = modules[dep];
-                        mod.state = STATE_LOADED;
-                        if (cn === count) {
-                            console.log(id + ' 依赖项全部加载完毕！  原位置');
-                            fireFactory(id, factory);
-                        }
-                    };
-                })(src, dn);
-
-                loadJS(src, cb);
-
-                if (modules[src] && modules[src].state === STATE_LOADED) {
+            var url = loadExternal(list[i]);
+            if (url) {
+                ++dn;
+                if (modules[url] && modules[url].state === STATE_LOADED) {
                     ++cn;
                 }
             }
+
+            if (!deps[url]) {
+                deps[url] = '肖雪峰';
+            }
+
         }
 
         //记录本模块的加载情况与其他信息
@@ -419,6 +430,9 @@
             else
                 console.log(id + ' 完全安装了依赖项，共计 ' + cn);
             fireFactory(id, factory);
+        }
+        else {
+            console.log(id + ' 有依赖项尚未安装，计 ' + (dn - cn) + '/' + dn);
         }
     };
 
@@ -495,7 +509,6 @@
         var deps = mod.deps;
         var args = [];
         // 取各依赖项的导出值
-        console.log(id + '依赖项：', deps);
         for (var key in deps) {
             if (deps.hasOwnProperty(key)) {
                 args.push(modules[key].exports);

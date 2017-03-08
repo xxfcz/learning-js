@@ -7,6 +7,13 @@
     <script src="../lib/console.js"></script>
     <script src="../lib/xlib.js"></script>
     <script>
+        function test0() {
+            $.require([], function () {
+                console.log('$.require() 的回调函数被执行了！');
+                console.log('没有依赖项');
+            });
+        }
+
         function test1() {
             $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
                     'http://localhost:63342/LearningJS/frx/examples/mod2.js'],
@@ -21,11 +28,11 @@
             $.require(['http://localhost:63342/LearningJS/frx/examples/mod1.js',
                     'http://localhost:63342/LearningJS/frx/examples/mod3.js'],
                 function (mod1, mod3) {
-                    console.log('依赖项的返回值：mod1=', mod1, ', mod3=', mod3);
+                    console.log('在HTML页面中，各依赖项的返回值：mod1=', mod1, ', mod3=', mod3);
                 });
         }
 
-        test1();
+        test0();
     </script>
 </head>
 <body>
