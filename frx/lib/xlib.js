@@ -5,6 +5,7 @@
 (function (global, DOC) {
     var W3C = typeof window.dispatchEvent !== 'undefined';
     var head = document.head || document.getElementsByTagName('head')[0];
+    var moduleClass = "xlib" + (new Date - 0);
     var basepath;
 
     (function () {
@@ -54,6 +55,37 @@
         };
     }());
 
+    /**
+     * 数组化
+     * @param {ArrayLike} nodes 要处理的类数组对象
+     * @param {Number} start 可选。要抽取的片断的起始下标。如果是负数，从后面取起
+     * @param {Number} end  可选。规定从何处结束选取
+     * @return {Array}
+     * @api public
+     */
+    $.slice = W3C ? function (nodes, start, end) {
+        return factorys.slice.call(nodes, start, end);
+    } : function (nodes, start, end) {
+        var ret = [],
+            n = nodes.length;
+        if (end === void 0 || typeof end === "number" && isFinite(end)) {
+            start = parseInt(start, 10) || 0;
+            end = end == void 0 ? n : parseInt(end, 10);
+            if (start < 0) {
+                start += n;
+            }
+            if (end > n) {
+                end = n;
+            }
+            if (end < 0) {
+                end += n;
+            }
+            for (var i = start; i < end; ++i) {
+                ret[i - start] = nodes[i];
+            }
+        }
+        return ret;
+    };
 
     // types ------------------------------------------------------------------------------------------
 
@@ -203,6 +235,7 @@
         return result;
     };
 
+
     // events -------------------------------------------------------------------
 
     $.on = function (node, event, handler) {
@@ -331,7 +364,8 @@
         var dn = list.length; // 需安装的依赖项个数
         var cn = 0; // 已安装的依赖项个数
         // parent = parent || basepath;
-        var id = parent || 'callback' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
+        var id = parent || getCurrentScript() + '.cb' + setTimeout(function () { });  // 起个没什么意义的名字，但也不要重复
+        //var name = id.
 
         // 对每一个依赖项
         for (i = 0; i < list.length; ++i) {
@@ -379,8 +413,11 @@
         };
 
 
-        if (cn === dn) {
-            console.log(id + ' 完全安装了依赖项，共计 ' + cn);
+        if (dn === 0 || cn === dn) {
+            if (dn === 0)
+                console.log(id + ' 没有依赖项。');
+            else
+                console.log(id + ' 完全安装了依赖项，共计 ' + cn);
             fireFactory(id, factory);
         }
     };
