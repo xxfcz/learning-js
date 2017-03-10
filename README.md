@@ -1,2 +1,2 @@
-# solid-invention
-(Private) Learning JavaScript
+# Learning JavaScript
+This repository was meant to be *Private*。 
