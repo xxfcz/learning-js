@@ -33,14 +33,9 @@ var Utest = (function () {
 
     function Utest(el) {
         var _div;
-        if (el)
-            _div = document.getElementById(el);
-        else {
-            _div = document.createElement('div');
-            _div.id = 'utest';
-            document.body.appendChild(_div);
-        }
-
+        _div = document.createElement('div');
+        _div.className = 'utest';
+        document.body.appendChild(_div);
         this._div = _div;
     }
 

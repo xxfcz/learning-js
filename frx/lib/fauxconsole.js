@@ -48,7 +48,7 @@
                 for (var i = 0, l = arguments.length; i < l; ++i) {
                     consoleContent.innerHTML += '<br/><br/>' + arguments[i];
                 }
-                show();
+                this.show();
             }
             
         };
