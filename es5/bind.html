@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=yes, width=device-width">
+    <title>bind()</title>
+    <script>
+        this.x = 9;    // this refers to global "window" object here in the browser
+        var module = {
+            x: 81,
+            getX: function() { return this.x; }
+        };
+
+        var r = module.getX(); // 81
+        console.log(r);
+
+        var retrieveX = module.getX;
+        r = retrieveX();
+        console.log(r);
+        // returns 9 - The function gets invoked at the global scope
+
+        // Create a new function with 'this' bound to module
+        // New programmers might confuse the
+        // global var x with module's property x
+        var boundGetX = retrieveX.bind(module);
+        boundGetX(); // 81
+    </script>
+</head>
+<body>
+<script>
+
+</script>
+</body>
+</html>
